@@ -1,0 +1,20 @@
+```{r}
+#| warning: false
+#| message: false
+
+# Load libraries
+library(tidyverse)
+
+# Load metadata file
+metadata <- read_csv("../data/_raw/GSE271059_metadata.csv")
+head(metadata)
+
+# Load raw count matrix
+raw_counts <- read_csv("../data/_raw/GSE271059_raw_counts.csv")
+head(raw_counts)
+
+# Save metadata and raw counts as TSV files in data folder
+write_tsv(metadata, "../data/01.dat_metadata.tsv")
+write_tsv(raw_counts, "../data/01_dat_raw_counts.tsv")
+
+```

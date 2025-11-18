@@ -1,0 +1,32 @@
+```{r}
+#| warning: false
+#| message: false
+
+# Load libraries
+library(tidyverse)
+
+# Load metadata
+metadata <- read_tsv("../data/01_dat_metadata.tsv")
+
+# Replace "Not_Available" cases with NA, deal with duplicates, and standardize names in the Localisation column
+metadata_clean <- metadata |> 
+  mutate(Localisation = na_if(Localisation, "Not_Available")) |>
+  mutate(Localisation = recode(Localisation,
+    "Präcentral" = "Precentral",
+    "parietal" = "Parietal",
+    "Okzipital" = "Occipital",
+    "Parieto-okzipital" = "Parieto-occipital",
+    "Temporoinsulär" = "Temporoinsular",
+    "Fronto-temporal" = "Frontotemporal",
+    "Frontotemporal" = "Frontotemporal",
+    "Frontoparietal" = "Frontoparietal",
+    "Fronto-parietal" = "Frontoparietal",
+    "Temporoparietal" = "Temporoparietal",
+    "Infratentoriel" = "Infratentorial",
+    .default = Localisation
+  )) |>
+  distinct(Patient, Sample_names, .keep_all = TRUE)
+
+# Save cleaned metadata
+write_tsv(metadata_clean, "../data/02_dat_metadata_clean.tsv")
+```
