@@ -14,7 +14,6 @@ raw_counts <- read_csv("../data/_raw/GSE271059_raw_counts.csv")
 head(raw_counts)
 
 # Save metadata and raw counts as TSV files in data folder
-write_tsv(metadata, "../data/01.dat_metadata.tsv")
+write_tsv(metadata, "../data/01_dat_metadata.tsv")
 write_tsv(raw_counts, "../data/01_dat_raw_counts.tsv")
-
 ```
