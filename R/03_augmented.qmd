@@ -1,40 +1,54 @@
 ```{r}
+#| title: Loading-libraries
 #| warning: false
 #| message: false
 
 library("tidyverse")
+source("99_proj_func.R")
 ```
 
 ```{r}
-metadata_clean |> 
-  summarise(Age_min = min(Age),
-            Age_max = max(Age))
+#| title: Loading_data
+#| warning: false
+#| message: false
+metadata_clean <- read_tsv("../data/02_dat_metadata_clean.tsv")
+raw_counts <- read_tsv("../data/01_dat_raw_counts.tsv")
 ```
 
 ```{r}
+#| title: Augmenting 
+
+#creating age groups
 metadata_clean <- metadata_clean |> 
   mutate(Age_groups = cut(Age,
                           breaks = c(18,40,60,82),
                           labels = c("Young", "Middle", "Older"),
                           right = FALSE))
-```
 
-```{r}
-source("99_proj_func.R")
+#normalizing counts
 cpm_counts <- CPM_normalization(raw_counts)
-quant_counts <- quantile_normalization(cpm_counts)
-augmented_metadata <- GEP_score_calculation(quant_counts, metadata_clean)
-```
+quant_counts <- quantile_normalization(raw_counts)
 
-```{r}
+#calculating GEP scores
+augmented_metadata <- GEP_score_calculation(quant_counts, metadata_clean)
+
+#pivoting normalized counts to long format 
+cpm_long <- cpm_counts |> 
+  pivot_longer(cols = -GeneFeature,
+               names_to = "Sample_names",
+               values_to = "CPM")
 quant_long <- quant_counts |> 
   pivot_longer(cols = -GeneFeature,
                names_to = "Sample_names",
-               values_to = "Count")
-```
+               values_to = "Quantile")
 
-```{r}
+#joining data
 joined_data <- quant_long |> 
+  left_join(cpm_long, 
+            by = c("Sample_names", "GeneFeature")) |> 
   left_join(augmented_metadata, 
             by = "Sample_names")
+
+#saving final table
+write_tsv(joined_data, "../data/03_augmented_table.tsv")
 ```
