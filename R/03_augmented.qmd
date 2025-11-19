@@ -1,0 +1,40 @@
+```{r}
+#| warning: false
+#| message: false
+
+library("tidyverse")
+```
+
+```{r}
+metadata_clean |> 
+  summarise(Age_min = min(Age),
+            Age_max = max(Age))
+```
+
+```{r}
+metadata_clean <- metadata_clean |> 
+  mutate(Age_groups = cut(Age,
+                          breaks = c(18,40,60,82),
+                          labels = c("Young", "Middle", "Older"),
+                          right = FALSE))
+```
+
+```{r}
+source("99_proj_func.R")
+cpm_counts <- CPM_normalization(raw_counts)
+quant_counts <- quantile_normalization(cpm_counts)
+augmented_metadata <- GEP_score_calculation(quant_counts, metadata_clean)
+```
+
+```{r}
+quant_long <- quant_counts |> 
+  pivot_longer(cols = -GeneFeature,
+               names_to = "Sample_names",
+               values_to = "Count")
+```
+
+```{r}
+joined_data <- quant_long |> 
+  left_join(augmented_metadata, 
+            by = "Sample_names")
+```
