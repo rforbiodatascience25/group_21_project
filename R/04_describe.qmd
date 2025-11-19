@@ -1,0 +1,34 @@
+```{r}
+#| warning: false
+#| message: false
+
+library("tidyverse")
+library('corrr')
+library("ggcorrplot")
+library("FactoMineR")
+```
+
+```{r}
+str(cpm_counts)
+colSums(is.na(cpm_counts))
+numerical_data <- cpm_counts[,2:65]
+head(numerical_data)
+```
+
+```{r}
+data.pca <- princomp(numerical_data)
+summary(data.pca)
+PCA(numerical_data)
+```
+```{r}
+data.pca$loadings[, 1:2]
+```
+```{r}
+fviz_eig(data.pca, addlabels = TRUE)
+fviz_pca_var(data.pca, col.var = "black")
+fviz_cos2(data.pca, choice = "var", axes = 1:2)
+fviz_pca_var(data.pca, col.var = "cos2",
+            gradient.cols = c("black", "orange", "green"),
+            repel = TRUE)
+```
+
