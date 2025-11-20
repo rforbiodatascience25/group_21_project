@@ -12,39 +12,39 @@ library("ggrepel")
 
 ```{r}
 augmented_table <- read_tsv("../data/03_augmented_table.tsv")
+augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
 ```
 
 ```{r}
-#  MODEL 1: CPM ~ TLS_status
+#  MODEL 1: CPM log2 transformed ~ TLS_status
 nested_data <- augmented_table |>
   group_by(GeneFeature) |>
   nest()  |>
   mutate(
-    model = map(data, ~lm(CPM ~ TLS_status, data = .x)),
+    model = map(data, ~lm(CPM_log2 ~ TLS_status_bin, data = .x)),
     tidy_model = map(model, ~tidy(.x, conf.int = TRUE))
   )
+```
 
+```{r}
 gene_results <- nested_data |>
   unnest(tidy_model) |>
-  filter(term == "TLS_statusTLS") |>
+  filter(term == "TLS_status_bin") |>
   select(GeneFeature, estimate, p.value, conf.low, conf.high) |>
   mutate(
     q.value = p.adjust(p.value, method = "fdr"),
-    significant = q.value < 0.05
+    significant = q.value < 0.01
   )
-
 ```
 
 ```{r}
 #MODEL 2: GEP_score ~ TLS_status
-gep_model <- lm(GEP_score ~ TLS_status, data = augmented_metadata)
+gep_model <- lm(GEP_score ~ TLS_status_bin, data = augmented_metadata)
 gep_model_tidy <- tidy(gep_model, conf.int = TRUE)
 
 ```
 
 ```{r}
-
-
 #Forest plot for significant genes (CPM ~ TLS_status)
 forest_plot <- gene_results |>
   filter(significant == TRUE) |>
@@ -55,7 +55,7 @@ forest_plot <- gene_results |>
   geom_vline(xintercept = 0, linetype = "dashed") +
   labs(
     title = "Differential Expression by TLS Status (CPM)",
-    subtitle = "Forest plot of statistically significant genes (FDR < 0.05)",
+    subtitle = "Forest plot of statistically significant genes (FDR < 0.01)",
     x = "Effect size (Estimate ± 95% CI)",
     y = NULL
   ) +
@@ -78,10 +78,14 @@ volcano_plot <- gene_results |>
     color = "Significant"
   ) +
   theme_minimal()
-
-
-# Print plots in the document
-forest_plot
-volcano_plot
 ```
 
+```{r}
+#Print forest plot
+forest_plot
+```
+
+```{r}
+#Print volcano plot
+volcano_plot
+```

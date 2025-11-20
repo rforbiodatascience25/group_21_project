@@ -49,6 +49,10 @@ joined_data <- quant_long |>
   left_join(augmented_metadata, 
             by = "Sample_names")
 
+joined_data <- joined_data |>
+  mutate(TLS_status_bin = if_else(TLS_status == "control", 0, 1)) |>
+  mutate(CPM_log2 = log(CPM+1, base=2))
+
 #saving final table
 write_tsv(joined_data, "../data/03_augmented_table.tsv")
 write_tsv(augmented_metadata, "../data/03_augmented_metadata.tsv")
