@@ -5,25 +5,20 @@
 ```
 
 ```{r}
-library(tidyverse)
-library(broom)
-library(ggrepel)
-
+library("tidyverse")
+library("broom")
+library("ggrepel")
 ```
 
 ```{r}
-# joined CPM + metadata
-cpm_joined <- cpm_long |>
-  left_join(augmented_metadata, by = "Sample_names")
+augmented_table <- read_tsv("../data/03_augmented_table.tsv")
 ```
 
 ```{r}
 #  MODEL 1: CPM ~ TLS_status
-nested_data <- cpm_joined |>
+nested_data <- augmented_table |>
   group_by(GeneFeature) |>
-  nest()
-
-nested_data <- cpm_nested |>
+  nest()  |>
   mutate(
     model = map(data, ~lm(CPM ~ TLS_status, data = .x)),
     tidy_model = map(model, ~tidy(.x, conf.int = TRUE))
