@@ -41,7 +41,6 @@ gene_results <- nested_data |>
 #MODEL 2: GEP_score ~ TLS_status
 gep_model <- lm(GEP_score ~ TLS_status_bin, data = augmented_metadata)
 gep_model_tidy <- tidy(gep_model, conf.int = TRUE)
-
 ```
 
 ```{r}
