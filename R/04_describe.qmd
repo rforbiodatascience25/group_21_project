@@ -6,23 +6,76 @@ library("tidyverse")
 library('corrr')
 library("ggcorrplot")
 library("FactoMineR")
+library("table1")
+library("ggplot2")
+
+metadata_clean <- read_tsv("../data/03_augmented_table.tsv")
+cpm_counts <- read_tsv("../data/03_augmented_table2.tsv")
 ```
 
 ```{r}
-str(cpm_counts)
-colSums(is.na(cpm_counts))
+metadata_clean |>
+  mutate(Gender = factor(Gender),
+         Cohort = factor(Batch)) |>
+  table1(x = formula(~ Gender + Age + Localisation + TLS_status | IDH_status),
+         data = _)
+```
+
+
+```{r}
+head(metadata_clean)
+str(metadata_clean)
 numerical_data <- cpm_counts[,2:65]
 head(numerical_data)
 ```
+```{r}
+expr_mat <- metadata_clean %>%
+  select(Sample_names, GeneFeature, CPM) %>%
+  pivot_wider(
+    names_from  = GeneFeature,   # each gene -> one column
+    values_from = CPM
+  ) %>%
+  column_to_rownames("Sample_names") %>%
+  as.matrix()
+
+# expr_mat[is.na(expr_mat)] <- 0
+```
+
+```{r}
+pca_res <- prcomp(expr_mat, center = TRUE, scale. = TRUE)
+
+summary(pca_res)        # variance explained
+head(pca_res$x)         # PC scores for samples
+```
+```{r}
+meta <- metadata_clean %>%
+  select(Sample_names, Patient, IDH_status, Localisation,
+         Primary_or_Recurrent, Age, Gender, Batch,
+         TLS_status, B_cell_aggregation, Age_groups) %>%
+  distinct()
+
+scores <- as.data.frame(pca_res$x) %>%
+  rownames_to_column("Sample_names") %>%
+  left_join(meta, by = "Sample_names")
+```
+
+```{r}
+ggplot(scores, aes(PC1, PC2, color = IDH_status)) +
+  geom_point() +
+  theme_minimal()
+```
+
 
 ```{r}
 data.pca <- princomp(numerical_data)
 summary(data.pca)
-PCA(numerical_data)
+# PCA(numerical_data)
 ```
+
 ```{r}
 data.pca$loadings[, 1:2]
 ```
+
 ```{r}
 fviz_eig(data.pca, addlabels = TRUE)
 fviz_pca_var(data.pca, col.var = "black")
@@ -31,4 +84,133 @@ fviz_pca_var(data.pca, col.var = "cos2",
             gradient.cols = c("black", "orange", "green"),
             repel = TRUE)
 ```
+
+
+
+---
+title: "Lab 7 Assignment: Group 21"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+------------------------------------------------------------------------
+
+# Group composition
+
+Magdalena Zydorczak, s253712
+
+Parastoo Tabibzadehtehrani, s252800
+
+Sai Renuka Chandrasekaran, s252633
+
+Ole Lennart Decker, s253728
+
+Raquel Ruiz Pascual, s254628
+
+------------------------------------------------------------------------
+
+# Assignment
+
+## Load libraries
+
+```{r}
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(broom)
+library(cowplot)
+```
+
+## Load data
+
+```{r}
+#| warning: false
+#| message: false
+
+biopsy <- read_csv("https://wilkelab.org/classes/SDS348/data_sets/biopsy.csv")
+```
+
+## Data description
+
+The dataset analyzed in this report correponds to a collection of breast cancer biopsy measurements from 683 patients. The data include nine numerical tumor characteristics (scored from 1 to 10) and a categorical outcome indicating whether the tumor is *bening* or *malignant*.
+
+The dataset contains nine numeric predictor variables: clump_thickness, uniform_cell_size, uniform_cell_shape, marg_adhesion, epithelial_cell_size, bare_nuclei, bland_chromatin, normal_nucleoli, mitoses, outcome.
+
+## PCA analysis
+```{r}
+# chunk below for our data
+
+# biopsy <- metadata_clean
+pca_fit2 <- cpm_counts |> 
+  select(where(is.numeric)) |> 
+  prcomp(scale = T)
+```
+
+### Look at the data in PC coordinates
+
+```{r}
+# biopsy <- metadata_clean
+pca_fit <- biopsy |> 
+  select(where(is.numeric)) |> 
+  prcomp(scale = TRUE)
+
+pca_fit |> 
+  augment(biopsy) |> 
+  ggplot(aes(.fittedPC1, .fittedPC2, color = outcome)) + 
+  geom_point(size = 1.5, alpha=0.5) +
+  scale_color_manual(
+    values = c(malignant = "#9C0101", benign = "blue")
+  ) +
+  theme_half_open(12) + background_grid() +
+  labs(title = "The first two PCs of biopsy data",
+       x = "PC1",
+       y = "PC2")
+```
+
+Here we plotted the first two PCs conducted from a principle component analysis on a range of biopsy data of tumor cells, stratified by outcome of the tumor development.
+
+```{r}
+arrow_style <- arrow(
+  angle = 20, ends = "first", type = "closed", length = grid::unit(8, "pt")
+)
+
+
+pca_fit |> 
+  tidy(matrix = "rotation") |> 
+  pivot_wider(names_from = "PC", names_prefix = "PC", values_from = "value") |> 
+  ggplot(aes(PC1, PC2)) +
+  geom_segment(xend = 0, yend = 0, arrow = arrow_style) +
+  geom_text(
+    aes(label = column),
+    hjust = 1, nudge_x = -0.02, 
+    color = "#9C0101"
+  ) +
+  xlim(-1.25, .5) + ylim(-.5, 1) +
+  coord_fixed() + 
+  theme_minimal_grid(12)
+```
+
+We plotted the vectors of the biopsy results on the first two PCs of a PCA on tumor cell biopsy data, showing the magnitude of influence of the individual biopsy results on the PCs 1 and 2.
+
+### Look at the variance explained by each PC
+
+```{r}
+pca_fit |>
+  tidy(matrix = "eigenvalues") |>
+  ggplot(aes(PC, percent)) +
+  geom_col(fill = "#9c0101", alpha = 0.8, color = "black") +
+  scale_x_continuous(breaks = 1:9) +
+  scale_y_continuous(
+    labels = scales::percent_format(),
+    expand = expansion(mult = c(0, 0.01))
+  ) +
+  theme_minimal_hgrid(12) +
+  labs(y = "Percent",
+       title = "Variance explained by the principal components")
+```
+
+We plotted the distribution of the variance that is explained by the 9 principal components.
 

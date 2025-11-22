@@ -51,4 +51,5 @@ joined_data <- quant_long |>
 
 #saving final table
 write_tsv(joined_data, "../data/03_augmented_table.tsv")
+write_tsv(cpm_counts, "../data/03_augmented_table2.tsv")
 ```
