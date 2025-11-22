@@ -1,0 +1,91 @@
+```{r}
+#| title: Modeling
+#| warning: false
+#| message: false
+```
+
+```{r}
+library("tidyverse")
+library("broom")
+library("ggrepel")
+```
+
+```{r}
+augmented_table <- read_tsv("../data/03_augmented_table.tsv")
+augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
+```
+
+```{r}
+#  MODEL 1: CPM log2 transformed ~ TLS_status
+nested_data <- augmented_table |>
+  group_by(GeneFeature) |>
+  nest()  |>
+  mutate(
+    model = map(data, ~lm(CPM_log2 ~ TLS_status_bin, data = .x)),
+    tidy_model = map(model, ~tidy(.x, conf.int = TRUE))
+  )
+```
+
+```{r}
+gene_results <- nested_data |>
+  unnest(tidy_model) |>
+  filter(term == "TLS_status_bin") |>
+  select(GeneFeature, estimate, p.value, conf.low, conf.high) |>
+  mutate(
+    q.value = p.adjust(p.value, method = "fdr"),
+    significant = q.value < 0.01
+  )
+```
+
+```{r}
+#MODEL 2: GEP_score ~ TLS_status
+gep_model <- lm(GEP_score ~ TLS_status_bin, data = augmented_metadata)
+gep_model_tidy <- tidy(gep_model, conf.int = TRUE)
+
+```
+
+```{r}
+#Forest plot for significant genes (CPM ~ TLS_status)
+forest_plot <- gene_results |>
+  filter(significant == TRUE) |>
+  mutate(GeneFeature = fct_reorder(GeneFeature, estimate)) |>
+  ggplot(aes(x = estimate, y = GeneFeature)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Differential Expression by TLS Status (CPM)",
+    subtitle = "Forest plot of statistically significant genes (FDR < 0.01)",
+    x = "Effect size (Estimate ± 95% CI)",
+    y = NULL
+  ) +
+  theme_minimal()
+
+#Volcano plot for all genes
+volcano_plot <- gene_results |>
+  mutate(
+    neg_log10_p = -log10(p.value),
+    label = if_else(significant, GeneFeature, "")
+  ) |>
+  ggplot(aes(x = estimate, y = neg_log10_p, color = significant)) +
+  geom_point(alpha = 0.6) +
+  geom_text_repel(aes(label = label), size = 2, max.overlaps = 20) +
+  geom_hline(yintercept = 0, linetype = "dotted") +
+  labs(
+    title = "Volcano Plot of Gene Effects (CPM ~ TLS_status)",
+    x = "Effect size (Estimate)",
+    y = "-log10(p-value)",
+    color = "Significant"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#Print forest plot
+forest_plot
+```
+
+```{r}
+#Print volcano plot
+volcano_plot
+```
