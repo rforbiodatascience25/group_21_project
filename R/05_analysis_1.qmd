@@ -2,6 +2,7 @@
 #| title: Modeling
 #| warning: false
 #| message: false
+#| format: pdf
 ```
 
 ```{r}
@@ -87,4 +88,37 @@ forest_plot
 ```{r}
 #Print volcano plot
 volcano_plot
+```
+
+```{r}
+library(dplyr)
+library(forcats)
+
+top_genes <- gene_results |>
+  filter(significant) |>
+  slice_max(abs(estimate), n = 40)
+
+forest_top <- top_genes |>
+  mutate(GeneFeature = fct_reorder(GeneFeature, estimate)) |>
+  ggplot(aes(estimate, GeneFeature)) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  labs(
+    title = "Top Differentially Expressed Genes",
+    x = "Effect size (Estimate ± 95% CI)",
+    y = NULL
+  ) +
+  theme_minimal()
+
+forest_top
+
+```
+
+```{r}
+colnames(gene_results)
+```
+
+```{r}
+colnames(augmented_table)
 ```
