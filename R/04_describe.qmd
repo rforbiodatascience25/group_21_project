@@ -1,0 +1,7 @@
+---
+title: "Data description"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---

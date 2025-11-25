@@ -1,10 +1,16 @@
-```{r}
-#| title: Modeling
-#| warning: false
-#| message: false
-```
+---
+title: "Data analysis 1"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Modeling
 
 ```{r}
+#| warning: false
+#| message: false
 library("tidyverse")
 library("broom")
 library("ggrepel")
@@ -16,7 +22,7 @@ augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
 ```
 
 ```{r}
-#  MODEL 1: CPM log2 transformed ~ TLS_status
+#MODEL 1: CPM log2 transformed ~ TLS_status
 nested_data <- augmented_table |>
   group_by(GeneFeature) |>
   nest()  |>

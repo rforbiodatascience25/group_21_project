@@ -1,3 +1,11 @@
+---
+title: "Data loading"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
 ```{r}
 #| warning: false
 #| message: false
