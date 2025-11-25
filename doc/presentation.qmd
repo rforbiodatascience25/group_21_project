@@ -1,42 +1,85 @@
 ---
-title: "Presentation"
+title: "Functional Tertiary Lymphoid Structures in Human Gliomas"
 author: "Group 21"
 format:
   revealjs:
     incremental: true  
+    theme: serif
+    slide-number: true
+    css: styles.css
 ---
 
-# Introduction
+## Introduction
 
-## Dataset (article)
+#### Data set (article)
 
 -   Description/motivation of dataset
 -   Source
 -   Biological problem
 
-## Objectives
+#### Objectives
 
 -   Project objectives
 -   Objectives regarding biological problem
 
-# Materials and Methods
+------------------------------------------------------------------------
 
-## Materials:
+## Materials and Methods
 
--   The main data from GEO NCBI and the accession number is; GSE271059
+#### Materials:
 
--   The GEP Score and quantile normalization: <https://pubmed.ncbi.nlm.nih.gov/28650338/>
+-   Main data: \[GEO (NCBI) - GSE271059\]
 
-## Methods:
+    {<https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059>
 
--   Loading and Cleaning
+    <br>
 
--   Augmenting: functions and source
+-   Quantile Normalization and GEP score: \[Ayers et al., 2017\]
+
+    <https://pubmed.ncbi.nlm.nih.gov/28650338/>
+
+------------------------------------------------------------------------
+
+#### Methods:
+
+::: panel-tabset
+## Data Loading and Cleaning
+
+```         
+read_csv()
+
+Replacing "Not_Available" with NA
+
+distinct()
+
+Standardizing names
+```
+
+## Data Augmentation
+
+```         
+Creating age groups
+
+Normalizing counts and calculating GEP scores
+
+pivot_longer()
+
+left_join()
+```
+:::
+
+------------------------------------------------------------------------
+
+#### Methods:
 
 -   describing
 
 -   Analysis (Modeling)
 
-# Results
+------------------------------------------------------------------------
 
-# Discussion
+## Results
+
+------------------------------------------------------------------------
+
+## Discussion
