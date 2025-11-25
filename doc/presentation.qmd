@@ -1,0 +1,25 @@
+---
+title: "Presentation"
+author: "Group 21"
+format:
+  revealjs:
+    incremental: true  
+---
+
+# Introduction
+
+## Dataset (article)
+- Description/motivation of dataset
+- Source
+- Biological problem
+
+## Objectives
+- Project objectives
+- Objectives regarding biological problem
+
+# Materials and Methods
+
+# Results
+
+# Discussion
+
