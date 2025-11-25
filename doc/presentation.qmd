@@ -9,17 +9,34 @@ format:
 # Introduction
 
 ## Dataset (article)
-- Description/motivation of dataset
-- Source
-- Biological problem
+
+-   Description/motivation of dataset
+-   Source
+-   Biological problem
 
 ## Objectives
-- Project objectives
-- Objectives regarding biological problem
+
+-   Project objectives
+-   Objectives regarding biological problem
 
 # Materials and Methods
+
+## Materials:
+
+-   The main data from GEO NCBI and the accession number is; GSE271059
+
+-   The GEP Score and quantile normalization: <https://pubmed.ncbi.nlm.nih.gov/28650338/>
+
+## Methods:
+
+-   Loading and Cleaning
+
+-   Augmenting: functions and source
+
+-   describing
+
+-   Analysis (Modeling)
 
 # Results
 
 # Discussion
-
