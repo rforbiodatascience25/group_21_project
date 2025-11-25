@@ -1,0 +1,91 @@
+
+```{r setup}
+source("99_proj_func.R")
+```
+
+```{r}
+augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
+
+augmented_metadata <- augmented_metadata |>
+  mutate(
+    TLS_status_bin = factor(TLS_status_bin),
+    IDH_status = factor(IDH_status),
+    Primary_or_Recurrent = factor(Primary_or_Recurrent),
+    Gender = factor(Gender)
+  )
+```
+
+```{r}
+fisher_idh <- run_fisher_test(augmented_metadata, "TLS_status_bin", "IDH_status")
+fisher_primary <- run_fisher_test(augmented_metadata, "TLS_status_bin", "Primary_or_Recurrent")
+fisher_gender <- run_fisher_test(augmented_metadata, "TLS_status_bin", "Gender")
+
+list(
+  TLS_vs_IDH = fisher_idh,
+  TLS_vs_PrimaryRecurrent = fisher_primary,
+  TLS_vs_Gender = fisher_gender
+)
+```
+```{r}
+library(dplyr)
+library(ggplot2)
+
+# Prepare data for heatmaps
+tls_idh_counts <- augmented_metadata %>%
+  count(TLS_status_bin, IDH_status)
+
+tls_primary_counts <- augmented_metadata %>%
+  count(TLS_status_bin, Primary_or_Recurrent)
+
+tls_gender_counts <- augmented_metadata %>%
+  count(TLS_status_bin, Gender)
+
+# Heatmap 1: TLS_Status vs IDH Status
+heatmap_idh <- ggplot(tls_idh_counts, aes(x = IDH_status, y = TLS_status_bin, fill = n)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = n)) +
+  scale_fill_gradient(name = "Count", low = "white", high = "lightsteelblue3") +
+  scale_y_discrete(labels = c("0" = "Absent", "1" = "Present")) +
+  labs(
+    title = "TLS Status vs IDH Status", 
+    x = "IDH Status", 
+    y = "TLS Status") +
+  theme_minimal()
+
+# Heatmap 2: TLS_status_bin vs Primary_or_Recurrent
+heatmap_tumor_status <- ggplot(
+  tls_primary_counts,
+  aes(x = Primary_or_Recurrent, y = TLS_status_bin, fill = n)
+) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = n, color = n > max(n) * 0.7)) +
+  scale_color_manual(values = c("black", "white"), guide = "none") +
+  scale_fill_gradient(name = "Count", low = "white", high = "darkgreen") +
+  scale_x_discrete(labels = c("P" = "Primary", "R" = "Recurrant")) +
+  scale_y_discrete(labels = c("0" = "Absent", "1" = "Present")) +
+  labs(
+    title = "TLS Status vs Tumor Recurrance",
+    x = "Tumor Status",
+    y = "TLS Status"
+  ) +
+  theme_minimal()
+
+# Heatmap 3: TLS_status_bin vs Gender
+heatmap_gender <- ggplot(tls_gender_counts, aes(x = Gender, y = TLS_status_bin, fill = n)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = n)) +
+  scale_fill_gradient(name = "Count", low = "white", high = "indianred3") +
+  scale_x_discrete(labels = c("M" = "Male", "F" = "Female")) +
+  scale_y_discrete(labels = c("0" = "Absent", "1" = "Present")) +
+  labs(
+    title = "TLS status vs Gender", 
+    x = "Gender", 
+    y = "TLS Status") +
+  theme_minimal()
+
+# Print the heatmaps
+heatmap_idh
+heatmap_tumor_status
+heatmap_gender
+
+```

@@ -47,3 +47,11 @@ GEP_score_calculation <- function(quantile_normalized_counts, metadata){
 
   return(augmented_metadata)
 }
+
+run_fisher_test <- function(data, var1, var2) {
+  # var1, var2: column names as strings
+
+  tab <- table(data[[var1]], data[[var2]])
+  fisher.test(tab)
+}
+
