@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Group 21">
-  <title>Presentation</title>
+  <title>Functional Tertiary Lymphoid Structures in Human Gliomas</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -31,6 +31,7 @@
     }
   </style>
   <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="styles.css">
   <link href="presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="presentation_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -326,7 +327,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Presentation</h1>
+  <h1 class="title">Functional Tertiary Lymphoid Structures in Human Gliomas</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -337,38 +338,71 @@ Group 21
 </div>
 
 </section>
-<section>
-<section id="introduction" class="title-slide slide level1 center">
-<h1>Introduction</h1>
-
-</section>
-<section id="dataset-article" class="slide level2">
-<h2>Dataset (article)</h2>
+<section id="introduction" class="slide level2">
+<h2>Introduction</h2>
+<h4 id="data-set-article">Data set (article)</h4>
 <ul>
 <li class="fragment">Description/motivation of dataset</li>
 <li class="fragment">Source</li>
 <li class="fragment">Biological problem</li>
 </ul>
-</section>
-<section id="objectives" class="slide level2">
-<h2>Objectives</h2>
+<h4 id="objectives">Objectives</h4>
 <ul>
 <li class="fragment">Project objectives</li>
 <li class="fragment">Objectives regarding biological problem</li>
 </ul>
-</section></section>
-<section id="materials-and-methods" class="title-slide slide level1 center">
-<h1>Materials and Methods</h1>
-
 </section>
-
-<section id="results" class="title-slide slide level1 center">
-<h1>Results</h1>
-
+<section id="materials-and-methods" class="slide level2">
+<h2>Materials and Methods</h2>
+<h4 id="materials">Materials:</h4>
+<ul>
+<li class="fragment"><p>Main data: [GEO (NCBI) - GSE271059]</p>
+<p>{<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059</a></p>
+<p><br></p></li>
+<li class="fragment"><p>Quantile Normalization and GEP score: [Ayers et al., 2017]</p>
+<p><a href="https://pubmed.ncbi.nlm.nih.gov/28650338/" class="uri">https://pubmed.ncbi.nlm.nih.gov/28650338/</a></p></li>
+</ul>
 </section>
+<section class="slide level2">
 
-<section id="discussion" class="title-slide slide level1 center">
-<h1>Discussion</h1>
+<h4 id="methods">Methods:</h4>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Data Loading and Cleaning</a></li><li><a href="#tabset-1-2">Data Augmentation</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<pre><code>read_csv()
+
+Replacing "Not_Available" with NA
+
+distinct()
+
+Standardizing names</code></pre>
+</div>
+<div id="tabset-1-2">
+<pre><code>Creating age groups
+
+Normalizing counts and calculating GEP scores
+
+pivot_longer()
+
+left_join()</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h4 id="methods-1">Methods:</h4>
+<ul>
+<li class="fragment"><p>describing</p></li>
+<li class="fragment"><p>Analysis (Modeling)</p></li>
+</ul>
+</section>
+<section id="results" class="slide level2">
+<h2>Results</h2>
+</section>
+<section id="discussion" class="slide level2">
+<h2>Discussion</h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
@@ -426,7 +460,7 @@ Group 21
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',

@@ -1,0 +1,15 @@
+.reveal .slides h1 {
+  font-size: 36pt;
+  text-align: center;
+}
+
+
+.reveal .slides p {
+  font-size: 22pt;
+}
+
+
+.reveal .slides ul,
+.reveal .slides ol {
+  font-size: 22pt;
+}
