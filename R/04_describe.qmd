@@ -1,3 +1,4 @@
+
 ```{r}
 #| warning: false
 #| message: false
@@ -19,76 +20,28 @@ PCA_ready_table <- read_tsv("../data/03_augmented_table_PCA.tsv")
 ```
 
 ```{r}
-augmented_metadata |>
+augmented_metadata_table <- augmented_metadata |>
   mutate(Gender = factor(Gender),
          Cohort = factor(Batch)) |>
   table1(x = formula(~ Gender + Age + Localisation + TLS_status | IDH_status),
          data = _)
+
+htmltools::save_html(augmented_metadata_table, "../results/IDH_status_table.html")
 ```
 
 ```{r}
-# head(augmented_table)
-# str(augmented_table)
-```
+augmented_metadata_table2 <- augmented_metadata |>
+  mutate(Gender = factor(Gender),
+         Cohort = factor(Batch)) |>
+  table1(x = formula(~ Gender + Age + Localisation + IDH_status | TLS_status),
+         data = _)
 
-```{r}
-# expr_mat <- augmented_table %>%
-#   select(Sample_names, GeneFeature, CPM) %>%
-#   pivot_wider(
-#     names_from  = GeneFeature,   # each gene -> one column
-#     values_from = CPM
-#   ) %>%
-#   column_to_rownames("Sample_names") %>%
-#   as.matrix()
-
-# expr_mat[is.na(expr_mat)] <- 0
-```
-
-```{r}
-# pca_res <- prcomp(expr_mat, center = TRUE, scale. = TRUE)
-# 
-# summary(pca_res)        # variance explained
-# head(pca_res$x)         # PC scores for samples
-```
-
-```{r}
-# meta <- augmented_table %>%
-#   select(Sample_names, Patient, IDH_status, Localisation,
-#          Primary_or_Recurrent, Age, Gender, Batch,
-#          TLS_status, B_cell_aggregation, Age_groups) %>%
-#   distinct()
-# 
-# scores <- as.data.frame(pca_res$x) %>%
-#   rownames_to_column("Sample_names") %>%
-#   left_join(meta, by = "Sample_names")
-```
-
-```{r}
-# ggplot(scores, aes(PC1, PC2, color = IDH_status)) +
-#   geom_point() +
-#   theme_minimal()
-```
-
-```{r}
-# data.pca <- princomp(numerical_data)
-# summary(data.pca)
-# PCA(numerical_data)
-```
-
-```{r}
-# data.pca$loadings[, 1:2]
-```
-
-```{r}
-# fviz_eig(data.pca, addlabels = TRUE)
-# fviz_pca_var(data.pca, col.var = "black")
-# fviz_cos2(data.pca, choice = "var", axes = 1:2)
-# fviz_pca_var(data.pca, col.var = "cos2",
-#             gradient.cols = c("black", "orange", "green"),
-#             repel = TRUE)
+htmltools::save_html(augmented_metadata_table2, "../results/TLS_status_table.html")
 ```
 
 # CLEAN:
+
+We are doing the principle componant analysis of the augmented data.
 
 ```{r}
 pca_fit <- PCA_ready_table |> 
@@ -100,25 +53,53 @@ pca_for_plots <- pca_fit |>
   augment(PCA_ready_table)
 ```
 
+First we take a look at the first two PCs 
+
 ```{r}
-pca_for_plots |>
-  ggplot(aes(.fittedPC1, .fittedPC2, color = TLS_status)) + 
-  geom_point(size = 1.5, alpha=0.5) +
+pca_tls <- pca_for_plots |>
+  ggplot(aes(.fittedPC1, .fittedPC2, color = TLS_status, fill = TLS_status)) + 
+  geom_point(size = 1.8, alpha=1, shape = 21) +
+  scale_fill_manual(
+    values = c(
+      TLS    = "indianred3",
+      control = "lightsteelblue2"
+    )
+  ) +
   scale_color_manual(
-    values = c(TLS = "#9C0101", control = "blue")
+    values = c(
+      TLS    = "indianred4",
+      control = "lightsteelblue3"
+    )
   ) +
   theme_half_open(12) + background_grid() +
   labs(title = "The first two PCs of transcription data, startified by TLS status",
        x = "PC1",
        y = "PC2")
+pca_tls
+ggsave(filename = "../results/TLS_status_PCA.png", plot = pca_tls, device = "png", bg = "white")
 ```
 
 ```{r}
-pca_for_plots |>
-  ggplot(aes(.fittedPC1, .fittedPC2, color = IDH_status)) + 
-  geom_point(size = 1.5, alpha=0.5) +
+pca_idh <- pca_for_plots |>
+  ggplot(aes(.fittedPC1, .fittedPC2, color = IDH_status, fill = IDH_status)) + 
+  geom_point(size = 1.8, alpha=1, shape = 21) +
+  scale_fill_manual(
+    values = c(
+      IDH_mutant    = "indianred3",
+      IDH_wild_type = "lightsteelblue2"
+    )
+  ) +
+  scale_color_manual(
+    values = c(
+      IDH_mutant    = "indianred4",
+      IDH_wild_type = "lightsteelblue3"
+    )
+  ) +
   theme_half_open(12) + background_grid() +
   labs(title = "The first two PCs of transcription data, startified by IDH status",
        x = "PC1",
        y = "PC2")
+pca_idh
+ggsave(filename = "../results/IDH_status_PCA.png", plot = pca_idh, device = "png", bg = "white")
 ```
+
