@@ -1,3 +1,5 @@
+library("tidyverse")
+
 CPM_normalization <- function(raw_counts){
   CPM_normalized_counts <- raw_counts |>
     mutate(across(!GeneFeature, ~(.*1000000)/sum(.)))

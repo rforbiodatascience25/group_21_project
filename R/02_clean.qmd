@@ -11,7 +11,7 @@ editor: visual
 #| message: false
 
 # Load libraries
-library(tidyverse)
+library("tidyverse")
 
 # Load metadata
 metadata <- read_tsv("../data/01_dat_metadata.tsv")

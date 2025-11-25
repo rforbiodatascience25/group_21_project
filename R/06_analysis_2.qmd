@@ -1,0 +1,7 @@
+---
+title: "Data analysis 2"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
