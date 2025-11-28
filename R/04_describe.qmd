@@ -19,25 +19,35 @@ augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
 PCA_ready_table <- read_tsv("../data/03_augmented_table_PCA.tsv")
 ```
 
-```{r}
-augmented_metadata_table <- augmented_metadata |>
-  mutate(Gender = factor(Gender),
-         Cohort = factor(Batch)) |>
-  table1(x = formula(~ Gender + Age + Localisation + TLS_status | IDH_status),
-         data = _)
 
-htmltools::save_html(augmented_metadata_table, "../results/IDH_status_table.html")
-```
 
+
+Overview comparision table of samples with glioma intratumoral tertiary lymphoid structures (TLSs) and control group samples.
 ```{r}
 augmented_metadata_table2 <- augmented_metadata |>
   mutate(Gender = factor(Gender),
          Cohort = factor(Batch)) |>
-  table1(x = formula(~ Gender + Age + Localisation + IDH_status | TLS_status),
+  table1(x = formula(~ IDH_status + Gender + Age + Localisation | TLS_status),
          data = _)
 
+augmented_metadata_table2
 htmltools::save_html(augmented_metadata_table2, "../results/TLS_status_table.html")
 ```
+
+
+Table 
+mutational status of the isocitrate dehydrogenase (IDH) against IDH wild type.
+```{r}
+augmented_metadata_table <- augmented_metadata |>
+  mutate(Gender = factor(Gender),
+         Cohort = factor(Batch)) |>
+  table1(x = formula(~ TLS_status + Gender + Age + Localisation | IDH_status),
+         data = _)
+
+augmented_metadata_table
+htmltools::save_html(augmented_metadata_table, "../results/IDH_status_table.html")
+```
+
 
 # CLEAN:
 
@@ -53,7 +63,7 @@ pca_for_plots <- pca_fit |>
   augment(PCA_ready_table)
 ```
 
-First we take a look at the first two PCs 
+First we take a look at the first two PCs of the PCA conducted on the RNA-seq gene expression matrix stratisfied by TLS Status.
 
 ```{r}
 pca_tls <- pca_for_plots |>
@@ -75,9 +85,13 @@ pca_tls <- pca_for_plots |>
   labs(title = "The first two PCs of transcription data, startified by TLS status",
        x = "PC1",
        y = "PC2")
+
 pca_tls
 ggsave(filename = "../results/TLS_status_PCA.png", plot = pca_tls, device = "png", bg = "white")
 ```
+generally speaking the majority of the datapoints lay in the same broad cluster in, both for control and TLS positive samples.
+We can estabilsh that there are some outliers for TLS positive samples that have a lower PC 2.
+
 
 ```{r}
 pca_idh <- pca_for_plots |>
@@ -99,7 +113,74 @@ pca_idh <- pca_for_plots |>
   labs(title = "The first two PCs of transcription data, startified by IDH status",
        x = "PC1",
        y = "PC2")
+
 pca_idh
 ggsave(filename = "../results/IDH_status_PCA.png", plot = pca_idh, device = "png", bg = "white")
+```
+In a PCA Plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH Status, we can clearly see that the datapoints from IDH mutant samples and IDH wild type each cluster together, which was expected since the mutational status of the isocitrate dehydrogenase (IDH) induce broad metabolic and epigenetic reprogramming and therefor influences a lot of other expression levels of other genes.
+Also it should be noted that the cumulative variance explained by the PC1&2 is only about 20 %. 
+
+```{r}
+summary(pca_fit)$importance[3, 2]
+```
+
+
+
+```{r}
+summary(pca_fit)$importance
+```
+
+
+```{r}
+summary(pca_fit)$importance[3, 2]
+```
+
+
+```{r}
+loadings <- pca_fit$rotation
+```
+
+```{r}
+top_PC1_pos <- loadings[, "PC1"] |> sort(decreasing = TRUE) |> head(20)
+top_PC1_neg <- loadings[, "PC1"] |> sort(decreasing = FALSE) |> head(20)
+```
+
+```{r}
+top_PC2_pos <- loadings[, "PC2"] |> sort(decreasing = TRUE) |> head(20)
+top_PC2_neg <- loadings[, "PC2"] |> sort(decreasing = FALSE) |> head(20)
+```
+
+```{r}
+pc1_top |>
+  ggplot(aes(x = reorder(gene, loading), y = loading)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Top gene loadings for PC1")
+```
+
+
+```{r}
+var_explained <- summary(pca_fit)$importance["Proportion of Variance", ]
+```
+
+```{r}
+library(tidyverse)
+
+df_var <- tibble(
+  PC = seq_along(var_explained),
+  variance = var_explained
+)
+```
+
+```{r}
+ggplot(df_var, aes(x = PC, y = variance)) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Variance explained by each principal component",
+    x = "Principal Component",
+    y = "Proportion of Variance"
+  ) +
+  theme_minimal()
 ```
 
