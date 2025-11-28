@@ -131,15 +131,13 @@ summary(pca_fit)$importance
 ```
 
 
-```{r}
-summary(pca_fit)$importance[3, 2]
-```
 
 
 ```{r}
 loadings <- pca_fit$rotation
 ```
 
+most important genes in proportion in the PC1 and PC2
 ```{r}
 top_PC1_pos <- loadings[, "PC1"] |> sort(decreasing = TRUE) |> head(20)
 top_PC1_neg <- loadings[, "PC1"] |> sort(decreasing = FALSE) |> head(20)
@@ -150,22 +148,13 @@ top_PC2_pos <- loadings[, "PC2"] |> sort(decreasing = TRUE) |> head(20)
 top_PC2_neg <- loadings[, "PC2"] |> sort(decreasing = FALSE) |> head(20)
 ```
 
-```{r}
-pc1_top |>
-  ggplot(aes(x = reorder(gene, loading), y = loading)) +
-  geom_col() +
-  coord_flip() +
-  labs(title = "Top gene loadings for PC1")
-```
 
-
+variance proportion expained by all PCs Plotted
 ```{r}
 var_explained <- summary(pca_fit)$importance["Proportion of Variance", ]
 ```
 
 ```{r}
-library(tidyverse)
-
 df_var <- tibble(
   PC = seq_along(var_explained),
   variance = var_explained
