@@ -31,17 +31,14 @@ quantile_normalization <- function(raw_counts){
 GEP_score_calculation <- function(quantile_normalized_counts, metadata){
   signature_genes <- tibble(
     gene = c("CCL5", "CD27", "CD274", "CD276","CD8A","CMKLR1","CXCL9", "CXCR6", "HLA-DQA1", "HLA-DRB1",
-               "HLA-E", "IDO1", "LAG3", "NKG7", "PDCD1LG2", "PSMB10", "STAT1", "TIGIT"),
-    weight = c(0.008346, 0.072293, 0.042853, -0.0239, 0.031021, 0.151253, 0.074135, 0.004313, 0.020091,
-                 0.058806, 0.07175, 0.060679, 0.123895, 0.075524, 0.003734, 0.032999, 0.250229, 0.084767)
+               "HLA-E", "IDO1", "LAG3", "NKG7", "PDCD1LG2", "PSMB10", "STAT1", "TIGIT")
   )
 
   augmented_metadata <- quantile_normalized_counts |>
     mutate(across(!GeneFeature, ~log10(.+1))) |>
     right_join(signature_genes,
                join_by(GeneFeature == gene)) |>
-    mutate(across(!GeneFeature, ~ .*weight)) |>
-    summarise(across(!GeneFeature, sum)) |>
+    summarise(across(!GeneFeature, mean)) |>
     pivot_longer(everything(),
                  names_to = "Sample_names",
                  values_to = "GEP_score") |>
