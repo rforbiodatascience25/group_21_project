@@ -77,15 +77,16 @@ ggsave(
 ```
 
 ```{r}
+#Plotting GEP score vs TLS status
 GEP_score_vs_TLS_status <- ggplot(augmented_metadata, aes(
-  x = TLS_status_bin,
+  x = factor(TLS_status_bin),
   y = GEP_score,
-  fill = TLS_status_bin
+  fill = factor(TLS_status_bin)
 )) +
   geom_boxplot(width = 0.5, alpha = 0.8, color = "black") +
   scale_x_discrete(labels = c("0" = "No", "1" = "Yes")) +
   geom_jitter(
-    aes(color = TLS_status_bin),
+    aes(color = factor(TLS_status_bin)),
     width = 0.07,
     alpha = 0.6,
     size = 2
@@ -117,6 +118,7 @@ ggsave(
 ```
 
 ```{r}
+#Checking if genes found significant by TLS status overlap with the 18 signature GEP genes
 signature_genes <- c(
   "CCL5", "CD27", "CD274", "CD276", "CD8A", "CMKLR1", "CXCL9",
   "CXCR6", "HLA-DQA1", "HLA-DRB1", "HLA-E", "IDO1", "LAG3",
@@ -143,9 +145,14 @@ overlap_table
 ```
 
 ```{r}
-siginifcant_genes_overlap <- ggplot(overlap_df, aes(x = Overlap, y = Gene, color = Overlap)) +
+siginifcant_genes_overlap <- ggplot(overlap_table, aes(
+  x = In_TLS_Significant,
+  y = Gene,
+  color = In_TLS_Significant
+)) +
   geom_point(size = 4) +
-  scale_color_manual(values = c("No" = "lightsteelblue4", "Yes" = "indianred3")) +
+  scale_x_discrete(labels = c("FALSE" = "No", "TRUE" = "Yes")) +
+  scale_color_manual(values = c("FALSE" = "lightsteelblue4", "TRUE" = "indianred3")) +
   labs(
     title = "Which Signature Genes Are TLS-Significant?",
     x = "",
@@ -153,17 +160,17 @@ siginifcant_genes_overlap <- ggplot(overlap_df, aes(x = Overlap, y = Gene, color
   ) +
   theme_minimal(base_size = 13) +
   theme(
-  legend.position = "none",
-  panel.grid.major.y = element_line(color = "grey70", size = 0.5),
-  panel.grid.major.x = element_line(color = "grey70", size = 0.5),
-  panel.grid.minor.y = element_line(color = "grey70", size = 0.3),
-  panel.grid.minor.x = element_line(color = "grey70", size = 0.3)
+    legend.position = "none",
+    panel.grid.major.y = element_line(color = "grey70", linewidth = 0.5),
+    panel.grid.major.x = element_line(color = "grey70", linewidth = 0.5),
+    panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.3),
+    panel.grid.minor.x = element_line(color = "grey70", linewidth = 0.3)
   )
 
 
 siginifcant_genes_overlap
 ggsave(
-  filename = "siginifcant_genes_overlap.png",
+  filename = "siginificant_genes_overlap.png",
   path = here("results"),
   dpi = 300
 )
