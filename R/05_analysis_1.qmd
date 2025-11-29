@@ -2,12 +2,14 @@
 #| title: Modeling
 #| warning: false
 #| message: false
+#| format: pdf
 ```
 
 ```{r}
 library("tidyverse")
 library("broom")
 library("ggrepel")
+library("here")
 ```
 
 ```{r}
@@ -44,24 +46,9 @@ gep_model_tidy <- tidy(gep_model, conf.int = TRUE)
 ```
 
 ```{r}
-#Forest plot for significant genes (CPM ~ TLS_status)
-forest_plot <- gene_results |>
-  filter(significant == TRUE) |>
-  mutate(GeneFeature = fct_reorder(GeneFeature, estimate)) |>
-  ggplot(aes(x = estimate, y = GeneFeature)) +
-  geom_point() +
-  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
-  geom_vline(xintercept = 0, linetype = "dashed") +
-  labs(
-    title = "Differential Expression by TLS Status (CPM)",
-    subtitle = "Forest plot of statistically significant genes (FDR < 0.01)",
-    x = "Effect size (Estimate ± 95% CI)",
-    y = NULL
-  ) +
-  theme_minimal()
-
 #Volcano plot for all genes
 volcano_plot <- gene_results |>
+  drop_na(estimate, p.value, significant, GeneFeature) |>
   mutate(
     neg_log10_p = -log10(p.value),
     label = if_else(significant, GeneFeature, "")
@@ -71,20 +58,121 @@ volcano_plot <- gene_results |>
   geom_text_repel(aes(label = label), size = 2, max.overlaps = 20) +
   geom_hline(yintercept = 0, linetype = "dotted") +
   labs(
-    title = "Volcano Plot of Gene Effects (CPM ~ TLS_status)",
-    x = "Effect size (Estimate)",
-    y = "-log10(p-value)",
-    color = "Significant"
-  ) +
+  title = "Volcano Plot of Gene Effects (CPM ~ TLS_status)",
+  x = "Effect size (Estimate)",
+  y = expression(-log[10](p.value)),
+  color = "Significant" ) +
   theme_minimal()
-```
 
-```{r}
-#Print forest plot
-forest_plot
 ```
 
 ```{r}
 #Print volcano plot
 volcano_plot
+ggsave(
+  filename = "volcano_plot.png",
+  path = here("results"),
+  dpi = 300
+)
+```
+
+```{r}
+#Plotting GEP score vs TLS status
+GEP_score_vs_TLS_status <- ggplot(augmented_metadata, aes(
+  x = factor(TLS_status_bin),
+  y = GEP_score,
+  fill = factor(TLS_status_bin)
+)) +
+  geom_boxplot(width = 0.5, alpha = 0.8, color = "black") +
+  scale_x_discrete(labels = c("0" = "No", "1" = "Yes")) +
+  geom_jitter(
+    aes(color = factor(TLS_status_bin)),
+    width = 0.07,
+    alpha = 0.6,
+    size = 2
+  ) +
+  scale_fill_manual(
+    values = c("0" = "lightsteelblue2", "1" = "indianred3")
+  ) +
+  scale_color_manual(
+    values = c("0" = "lightsteelblue4", "1" = "indianred4")
+  ) +
+  labs(
+    title = "GEP Score by TLS Status",
+    x = "TLS Status",
+    y = "GEP Score"
+  ) +
+  theme_classic(base_size = 15) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.title = element_text(face = "bold")
+  )
+
+GEP_score_vs_TLS_status
+ggsave(
+  filename = "GEP_score_vs_TLS_status.png",
+  path = here("results"),
+  dpi = 300
+)
+```
+
+```{r}
+#Checking if genes found significant by TLS status overlap with the 18 signature GEP genes
+signature_genes <- c(
+  "CCL5", "CD27", "CD274", "CD276", "CD8A", "CMKLR1", "CXCL9",
+  "CXCR6", "HLA-DQA1", "HLA-DRB1", "HLA-E", "IDO1", "LAG3",
+  "NKG7", "PDCD1LG2", "PSMB10", "STAT1", "TIGIT"
+)
+
+tls_sig_genes <- gene_results |>
+  filter(significant) |>
+  pull(GeneFeature)
+
+overlap_genes <- intersect(signature_genes, tls_sig_genes)
+
+overlap_genes
+length(overlap_genes)
+length(signature_genes)
+
+overlap_table <- tibble(
+  Gene = signature_genes,
+  In_TLS_Significant = signature_genes %in% tls_sig_genes
+)
+
+overlap_table
+
+```
+
+```{r}
+siginifcant_genes_overlap <- ggplot(overlap_table, aes(
+  x = In_TLS_Significant,
+  y = Gene,
+  color = In_TLS_Significant
+)) +
+  geom_point(size = 4) +
+  scale_x_discrete(labels = c("FALSE" = "No", "TRUE" = "Yes")) +
+  scale_color_manual(values = c("FALSE" = "lightsteelblue4", "TRUE" = "indianred3")) +
+  labs(
+    title = "Which Signature Genes Are TLS-Significant?",
+    x = "",
+    y = "Gene"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    panel.grid.major.y = element_line(color = "grey70", linewidth = 0.5),
+    panel.grid.major.x = element_line(color = "grey70", linewidth = 0.5),
+    panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.3),
+    panel.grid.minor.x = element_line(color = "grey70", linewidth = 0.3)
+  )
+
+
+siginifcant_genes_overlap
+ggsave(
+  filename = "siginificant_genes_overlap.png",
+  path = here("results"),
+  dpi = 300
+)
+
 ```
