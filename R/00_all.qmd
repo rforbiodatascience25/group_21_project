@@ -16,7 +16,9 @@ quarto_render(input = "01_load.qmd",
               execute = TRUE, 
               output_format = "html",
               output_file = "01_load.html")
-file.rename(from = here("R/01_load.html"), to = here("results/01_load.html"))
+
+file.rename(from = here("R/01_load.html"), 
+            to = here("results/01_load.html"))
 ```
 
 ```{r}
@@ -24,7 +26,9 @@ quarto_render(input = "02_clean.qmd",
               execute = TRUE, 
               output_format = "html",
               output_file = "02_clean.html")
-file.rename(from = here("R/02_clean.html"), to = here("results/02_clean.html"))
+
+file.rename(from = here("R/02_clean.html"), 
+            to = here("results/02_clean.html"))
 ```
 
 ```{r}
@@ -32,7 +36,9 @@ quarto_render(input = "03_augmented.qmd",
               execute = TRUE, 
               output_format = "html",
               output_file = "03_augmented.html")
-file.rename(from = here("R/03_augmented.html"), to = here("results/03_augmented.html"))
+
+file.rename(from = here("R/03_augmented.html"), 
+            to = here("results/03_augmented.html"))
 ```
 
 ```{r}
@@ -40,7 +46,9 @@ quarto_render(input = "04_describe.qmd",
               execute = TRUE, 
               output_format = "html",
               output_file = "04_describe.html")
-file.rename(from = here("R/04_describe.html"), to = here("results/04_describe.html"))
+
+file.rename(from = here("R/04_describe.html"), 
+            to = here("results/04_describe.html"))
 ```
 
 ```{r}
@@ -48,7 +56,9 @@ quarto_render(input = "05_analysis_1.qmd",
               execute = TRUE, 
               output_format = "html",
               output_file = "05_analysis_1.html")
-file.rename(from = here("R/05_analysis_1.html"), to = here("results/05_analysis_1.html"))
+
+file.rename(from = here("R/05_analysis_1.html"), 
+            to = here("results/05_analysis_1.html"))
 ```
 
 ```{r}
@@ -56,5 +66,8 @@ quarto_render(input = "06_analysis_2.qmd",
               execute = TRUE, 
               output_format = "html",
               output_file = "06_analysis_2.html")
-file.rename(from = here("R/06_analysis_2.html"), to = here("results/06_analysis_2.html"))
+
+file.rename(from = here("R/06_analysis_2.html"), 
+            to = here("results/06_analysis_2.html"))
 ```
+
