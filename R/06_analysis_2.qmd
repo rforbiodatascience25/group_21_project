@@ -5,7 +5,13 @@ format:
     embed-resources: true
 editor: visual
 ---
-```{r setup}
+
+```{r}
+#| warning: false
+#| message: false 
+
+library("here")
+library("tidyverse")
 source("99_proj_func.R")
 ```
 
@@ -125,3 +131,4 @@ ggsave(
   dpi = 300
 )
 ```
+

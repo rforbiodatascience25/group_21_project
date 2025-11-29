@@ -9,13 +9,6 @@ editor: visual
 ### Modeling
 
 ```{r}
-#| title: Modeling
-#| warning: false
-#| message: false
-#| format: pdf
-```
-
-```{r}
 #| warning: false
 #| message: false
 library("tidyverse")

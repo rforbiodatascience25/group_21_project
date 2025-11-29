@@ -7,6 +7,7 @@ editor: visual
 ---
 
 ## Loading libraries
+
 ```{r}
 #| warning: false
 #| message: false
@@ -16,6 +17,7 @@ source("99_proj_func.R")
 ```
 
 ## Loading data
+
 ```{r}
 #| warning: false
 #| message: false
@@ -24,6 +26,7 @@ raw_counts <- read_tsv("../data/01_dat_raw_counts.tsv")
 ```
 
 ## Augmenting
+
 ```{r}
 # Creating age groups
 metadata_clean <- metadata_clean |> 
@@ -38,6 +41,8 @@ quant_counts <- quantile_normalization(raw_counts)
 
 # Calculating GEP scores
 augmented_metadata <- GEP_score_calculation(quant_counts, metadata_clean)
+augmented_metadata <- augmented_metadata |>
+  mutate(TLS_status_bin = if_else(TLS_status == "control", 0, 1))
 
 # Pivoting normalized counts to long format 
 cpm_long <- cpm_counts |> 
@@ -58,7 +63,6 @@ joined_data <- quant_long |>
 
 # Binarizing TLS_status and log-transforming CPM counts
 joined_data <- joined_data |>
-  mutate(TLS_status_bin = if_else(TLS_status == "control", 0, 1)) |>
   mutate(CPM_log2 = log(CPM+1, base=2))
 
 keep_genes_for_PCA <- cpm_counts |>
