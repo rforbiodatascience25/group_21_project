@@ -5,3 +5,170 @@ format:
     embed-resources: true
 editor: visual
 ---
+
+```{r}
+#| warning: false
+#| message: false
+
+library("tidyverse")
+library("cowplot")
+library("broom")
+library("table1")
+library("ggplot2")
+```
+
+```{r}
+#| warning: false
+#| message: false
+
+augmented_table <- read_tsv("../data/03_augmented_table.tsv")
+augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
+PCA_ready_table <- read_tsv("../data/03_augmented_table_PCA.tsv")
+```
+
+# Table1
+
+Overview comparison table of samples with glioma intratumoral tertiary lymphoid structures (TLSs) and control group samples.
+
+```{r}
+augmented_metadata_table2 <- augmented_metadata |>
+  mutate(Gender = factor(Gender),
+         Cohort = factor(Batch)) |>
+  table1(x = formula(~ IDH_status + Gender + Age + Localisation | TLS_status),
+         data = _)
+
+augmented_metadata_table2
+htmltools::save_html(augmented_metadata_table2, "../results/TLS_status_table.html")
+```
+
+Table mutational status of the isocitrate dehydrogenase (IDH) against IDH wild type.
+
+```{r}
+augmented_metadata_table <- augmented_metadata |>
+  mutate(Gender = factor(Gender),
+         Cohort = factor(Batch)) |>
+  table1(x = formula(~ TLS_status + Gender + Age + Localisation | IDH_status),
+         data = _)
+
+augmented_metadata_table
+htmltools::save_html(augmented_metadata_table, "../results/IDH_status_table.html")
+```
+
+# PCA
+
+We are doing the principle component analysis of the augmented data.
+
+```{r}
+pca_fit <- PCA_ready_table |> 
+  select(where(is.numeric)) |> 
+  select(!c(GEP_score, Age, Batch)) |>
+  prcomp(scale = TRUE)
+
+pca_for_plots <- pca_fit |> 
+  augment(PCA_ready_table)
+```
+
+First we take a look at the first two PCs of the PCA conducted on the RNA-seq gene expression matrix stratisfied by TLS Status.
+
+```{r}
+pca_tls <- pca_for_plots |>
+  ggplot(aes(.fittedPC1, .fittedPC2, color = TLS_status, fill = TLS_status)) + 
+  geom_point(size = 1.8, alpha=1, shape = 21) +
+  scale_fill_manual(
+    values = c(
+      TLS    = "indianred3",
+      control = "lightsteelblue2"
+    )
+  ) +
+  scale_color_manual(
+    values = c(
+      TLS    = "indianred4",
+      control = "lightsteelblue3"
+    )
+  ) +
+  theme_half_open(12) + background_grid() +
+  labs(title = "The first two PCs of transcription data, startified by TLS status",
+       x = "PC1",
+       y = "PC2")
+
+pca_tls
+ggsave(filename = "../results/TLS_status_PCA.png", plot = pca_tls, device = "png", bg = "white")
+```
+
+Generally speaking the majority of the datapoints lay in the same broad cluster in, both for control and TLS positive samples. We can estabilsh that there are some outliers for TLS positive samples that have a lower PC 2.
+
+```{r}
+pca_idh <- pca_for_plots |>
+  ggplot(aes(.fittedPC1, .fittedPC2, color = IDH_status, fill = IDH_status)) + 
+  geom_point(size = 1.8, alpha=1, shape = 21) +
+  scale_fill_manual(
+    values = c(
+      IDH_mutant    = "indianred3",
+      IDH_wild_type = "lightsteelblue2"
+    )
+  ) +
+  scale_color_manual(
+    values = c(
+      IDH_mutant    = "indianred4",
+      IDH_wild_type = "lightsteelblue3"
+    )
+  ) +
+  theme_half_open(12) + background_grid() +
+  labs(title = "The first two PCs of transcription data, startified by IDH status",
+       x = "PC1",
+       y = "PC2")
+
+pca_idh
+ggsave(filename = "../results/IDH_status_PCA.png", plot = pca_idh, device = "png", bg = "white")
+```
+
+In a PCA Plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH Status, we can clearly see that the datapoints from IDH mutant samples and IDH wild type each cluster together, which was expected since the mutational status of the isocitrate dehydrogenase (IDH) induce broad metabolic and epigenetic reprogramming and therefore influences a lot of other expression levels of other genes. Also it should be noted that the cumulative variance explained by the PC1&2 is only about 20 %.
+
+```{r}
+summary(pca_fit)$importance[3, 2]
+```
+
+```{r}
+summary(pca_fit)$importance
+```
+
+```{r}
+loadings <- pca_fit$rotation
+```
+
+most important genes in proportion in the PC1 and PC2
+
+```{r}
+top_PC1_pos <- loadings[, "PC1"] |> sort(decreasing = TRUE) |> head(20)
+top_PC1_neg <- loadings[, "PC1"] |> sort(decreasing = FALSE) |> head(20)
+```
+
+```{r}
+top_PC2_pos <- loadings[, "PC2"] |> sort(decreasing = TRUE) |> head(20)
+top_PC2_neg <- loadings[, "PC2"] |> sort(decreasing = FALSE) |> head(20)
+```
+
+variance proportion expained by all PCs Plotted
+
+```{r}
+var_explained <- summary(pca_fit)$importance["Proportion of Variance", ]
+```
+
+```{r}
+df_var <- tibble(
+  PC = seq_along(var_explained),
+  variance = var_explained
+)
+```
+
+```{r}
+ggplot(df_var, aes(x = PC, y = variance)) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Variance explained by each principal component",
+    x = "Principal Component",
+    y = "Proportion of Variance"
+  ) +
+  theme_minimal()
+```

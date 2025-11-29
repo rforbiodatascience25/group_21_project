@@ -61,10 +61,20 @@ joined_data <- joined_data |>
   mutate(TLS_status_bin = if_else(TLS_status == "control", 0, 1)) |>
   mutate(CPM_log2 = log(CPM+1, base=2))
 
-augmented_metadata <- augmented_metadata |>
-  mutate(TLS_status_bin = if_else(TLS_status == "control", 0, 1))
+keep_genes_for_PCA <- cpm_counts |>
+  filter(rowSums(across(!GeneFeature)) > 0) |>
+  select(GeneFeature) |>
+  pull()
+
+PCA_ready_table <- joined_data |>
+  select(GeneFeature, CPM, Sample_names) |>
+  filter(GeneFeature %in% keep_genes_for_PCA) |>
+  pivot_wider(names_from = GeneFeature,
+              values_from = CPM) |>
+  inner_join(augmented_metadata, by = "Sample_names")
 
 # Saving final table
 write_tsv(joined_data, "../data/03_augmented_table.tsv")
+write_tsv(PCA_ready_table, "../data/03_augmented_table_PCA.tsv")
 write_tsv(augmented_metadata, "../data/03_augmented_metadata.tsv")
 ```
