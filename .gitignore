@@ -1,5 +1,4 @@
 data/
 .Rproj.user
+/.quarto/
 .Rhistory
-*.html
-*.png

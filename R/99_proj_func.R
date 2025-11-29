@@ -1,3 +1,5 @@
+library("tidyverse")
+
 CPM_normalization <- function(raw_counts){
   CPM_normalized_counts <- raw_counts |>
     mutate(across(!GeneFeature, ~(.*1000000)/sum(.)))
@@ -26,7 +28,6 @@ quantile_normalization <- function(raw_counts){
 }
 
 #Method from: https://pubmed.ncbi.nlm.nih.gov/28650338/ (including quantile normalization and log10 transformation)
-#Gene weights from: https://www.science.org/doi/10.1126/science.aar3593 (Supplementary table B)
 #Returns sample metadata with augmented GEP scores
 GEP_score_calculation <- function(quantile_normalized_counts, metadata){
   signature_genes <- tibble(

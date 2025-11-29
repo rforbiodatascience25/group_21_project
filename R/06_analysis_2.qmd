@@ -1,4 +1,17 @@
-```{r setup}
+---
+title: "Data analysis 2"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+```{r}
+#| warning: false
+#| message: false 
+
+library("here")
+library("tidyverse")
 source("99_proj_func.R")
 ```
 
@@ -118,3 +131,4 @@ ggsave(
   dpi = 300
 )
 ```
+

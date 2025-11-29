@@ -1,9 +1,17 @@
+---
+title: "Data loading"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
 ```{r}
 #| warning: false
 #| message: false
 
 # Load libraries
-library(tidyverse)
+library("tidyverse")
 
 # Load metadata file
 metadata <- read_csv("../data/_raw/GSE271059_metadata.csv")

@@ -1,5 +1,14 @@
+---
+title: "Data augmentation"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## Loading libraries
+
 ```{r}
-#| title: Loading-libraries
 #| warning: false
 #| message: false
 
@@ -7,32 +16,35 @@ library("tidyverse")
 source("99_proj_func.R")
 ```
 
+## Loading data
+
 ```{r}
-#| title: Loading_data
 #| warning: false
 #| message: false
 metadata_clean <- read_tsv("../data/02_dat_metadata_clean.tsv")
 raw_counts <- read_tsv("../data/01_dat_raw_counts.tsv")
 ```
 
-```{r}
-#| title: Augmenting 
+## Augmenting
 
-#creating age groups
+```{r}
+# Creating age groups
 metadata_clean <- metadata_clean |> 
   mutate(Age_groups = cut(Age,
                           breaks = c(18,40,60,82),
                           labels = c("Young", "Middle", "Older"),
                           right = FALSE))
 
-#normalizing counts
+# Normalizing counts
 cpm_counts <- CPM_normalization(raw_counts)
 quant_counts <- quantile_normalization(raw_counts)
 
-#calculating GEP scores
+# Calculating GEP scores
 augmented_metadata <- GEP_score_calculation(quant_counts, metadata_clean)
+augmented_metadata <- augmented_metadata |>
+  mutate(TLS_status_bin = if_else(TLS_status == "control", 0, 1))
 
-#pivoting normalized counts to long format 
+# Pivoting normalized counts to long format 
 cpm_long <- cpm_counts |> 
   pivot_longer(cols = -GeneFeature,
                names_to = "Sample_names",
@@ -42,15 +54,15 @@ quant_long <- quant_counts |>
                names_to = "Sample_names",
                values_to = "Quantile")
 
-#joining data
+# Joining data
 joined_data <- quant_long |> 
   left_join(cpm_long, 
             by = c("Sample_names", "GeneFeature")) |> 
   left_join(augmented_metadata, 
             by = "Sample_names")
 
+# Binarizing TLS_status and log-transforming CPM counts
 joined_data <- joined_data |>
-  mutate(TLS_status_bin = if_else(TLS_status == "control", 0, 1)) |>
   mutate(CPM_log2 = log(CPM+1, base=2))
 
 keep_genes_for_PCA <- cpm_counts |>
@@ -65,7 +77,7 @@ PCA_ready_table <- joined_data |>
               values_from = CPM) |>
   inner_join(augmented_metadata, by = "Sample_names")
 
-#saving final table
+# Saving final table
 write_tsv(joined_data, "../data/03_augmented_table.tsv")
 write_tsv(PCA_ready_table, "../data/03_augmented_table_PCA.tsv")
 write_tsv(augmented_metadata, "../data/03_augmented_metadata.tsv")
