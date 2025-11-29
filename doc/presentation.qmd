@@ -7,6 +7,7 @@ format:
     theme: serif
     slide-number: true
     css: styles.css
+    margin: 0.04
 ---
 
 ## Introduction
@@ -72,13 +73,76 @@ left_join()
 
 #### Methods:
 
--   describing
+::: panel-tabset
+## Descriptive Statistics
 
--   Analysis (Modeling)
+
+-   **Baseline tables**
+
+    -   TLS_status: IDH_status, Gender, Age, Localisation
+    -   IDH_status: TLS_status, Gender, Age, Localisation
+    
+-   **PCA on gene expression**
+
+    -   PC1–PC2 coloured by TLS_status
+    -   PC1–PC2 coloured by IDH_status
+    -   Variance explained by PCs
+
+## Statistical Models
+
+-   **Model 1 – TLS effect on gene expression**
+    -   CPM_log2 \~ TLS_status_bin
+    -   Output: volcano plot (TLS+ vs TLS−)
+-   **Model 2 – GEP scoreby TLS status**
+    -   GEP_score \~ TLS_status_bin
+-   **Model 3 – TLS and clinical features (Fisher tests)**
+    -   TLS_status_bin vs IDH_status
+    -   TLS_status_bin vs Primary/Recurrent
+    -   TLS_status_bin vs Gender
+:::
 
 ------------------------------------------------------------------------
 
-## Results
+##### Results
+
+#### Model 1 – TLS effect on gene expression
+
+::: columns
+::: column
+![](../results/volcano_plot.png){width="100%"}
+:::
+
+::: column
+- Each point = one gene (TLS+ vs TLS−)
+- Several genes are significantly associated with TLS status (q < 0.01)
+- Some genes higher in TLS+, others in controls  
+  → TLS status is linked to differences in gene expression
+:::
+:::
+------------------------------------------------------------------------
+
+##### Results
+
+#### Model 2 – GEP score by TLS status
+
+::: columns
+::: column
+![](../results/GEP_score_vs_TLS_status.png){width="100%"}
+:::
+
+::: column
+- Each point = one tumor sample
+- GEP score (18-gene immune signature)
+- Median GEP score is higher in TLS+ tumors than in controls
+:::
+:::
+------------------------------------------------------------------------
+
+##### Results
+
+#### Model 3 – TLS and clinical features (Fisher tests)
+
+   
 
 ------------------------------------------------------------------------
 
