@@ -340,28 +340,27 @@ Group 21
 </section>
 <section id="introduction" class="slide level2">
 <h2>Introduction</h2>
-<h4 id="data-set-article">Data set (article)</h4>
-<ul>
-<li class="fragment">Description/motivation of dataset</li>
-<li class="fragment">Source</li>
-<li class="fragment">Biological problem</li>
-</ul>
-<h4 id="objectives">Objectives</h4>
-<ul>
-<li class="fragment">Project objectives</li>
-<li class="fragment">Objectives regarding biological problem</li>
-</ul>
+<p><img data-src="images/Screenshot%202025-11-30%20at%2010.41.56.png" style="width:28cm;height:4cm"></p>
+<p><img data-src="images/Screenshot%202025-11-30%20at%2010.47.40.png" style="width:12cm;height:10cm"></p>
 </section>
 <section id="materials-and-methods" class="slide level2">
 <h2>Materials and Methods</h2>
 <h4 id="materials">Materials:</h4>
 <ul>
-<li class="fragment"><p>Main data: [GEO (NCBI) - GSE271059]</p>
-<p>{<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059</a></p>
-<p><br></p></li>
-<li class="fragment"><p>Quantile Normalization and GEP score: [Ayers et al., 2017]</p>
-<p><a href="https://pubmed.ncbi.nlm.nih.gov/28650338/" class="uri">https://pubmed.ncbi.nlm.nih.gov/28650338/</a></p></li>
+<li class="fragment"><p>Meta data: [GEO (NCBI) - GSE271059]</p>
+<ul>
+<li class="fragment"><p>IDH_status</p></li>
+<li class="fragment"><p>TLS_status</p></li>
+<li class="fragment"><p>Localisation</p></li>
+<li class="fragment"><p>Primary_or_Recurrent</p></li>
+<li class="fragment"><p>Age</p></li>
+<li class="fragment"><p>Gender</p></li>
+</ul></li>
+<li class="fragment"><p>Raw data: gene expression count matrix (genes × samples)</p></li>
 </ul>
+<div class="footer">
+<p><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059" class="uri">https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059</a></p>
+</div>
 </section>
 <section class="slide level2">
 
@@ -370,22 +369,35 @@ Group 21
 <ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Data Loading and Cleaning</a></li><li><a href="#tabset-1-2">Data Augmentation</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1">
-<pre><code>read_csv()
-
-Replacing "Not_Available" with NA
-
-distinct()
-
-Standardizing names</code></pre>
+<ul>
+<li class="fragment"><p><strong>Loading data</strong></p>
+<ul>
+<li class="fragment">read_csv()</li>
+</ul></li>
+<li class="fragment"><p><strong>Cleaning data</strong></p>
+<ul>
+<li class="fragment"><p>Replacing “Not_Available” with NA</p></li>
+<li class="fragment"><p>Removing duplicates: distinct()</p></li>
+<li class="fragment"><p>Standardizing names</p></li>
+</ul></li>
+</ul>
 </div>
 <div id="tabset-1-2">
-<pre><code>Creating age groups
-
-Normalizing counts and calculating GEP scores
-
-pivot_longer()
-
-left_join()</code></pre>
+<ul>
+<li class="fragment"><p><strong>Creating new metadata columns</strong></p>
+<ul>
+<li class="fragment"><p>Age_groups</p></li>
+<li class="fragment"><p>TLS_status_bin</p></li>
+</ul></li>
+<li class="fragment"><p><strong>Normalizing gene expression</strong></p>
+<ul>
+<li class="fragment"><p>cpm_normalization</p></li>
+<li class="fragment"><p>quantile_normalization</p></li>
+</ul></li>
+<li class="fragment"><p><strong>Computing GEP scores</strong></p></li>
+<li class="fragment"><p><strong>Combining normalized counts with metadata</strong></p></li>
+<li class="fragment"><p><strong>Preparing data for PCA/downstream analysis</strong></p></li>
+</ul>
 </div>
 </div>
 </div>
@@ -436,11 +448,39 @@ left_join()</code></pre>
 <section class="slide level2">
 
 <h5 id="results">Results</h5>
-<h4 id="model-1-tls-effect-on-gene-expression">Model 1 – TLS effect on gene expression</h4>
+<h4 id="impact-of-tls-status-on-transcriptional-signatures">Impact of TLS status on transcriptional signatures</h4>
 <div class="columns">
-<div class="column">
-<p><img data-src="../results/volcano_plot.png" style="width:100.0%"></p>
-</div><div class="column">
+<div class="column" style="width:50%;">
+<p><img data-src="images/TLS_status_PCA-03.png"></p>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><p>TLS status does not strongly separate the samples</p></li>
+<li class="fragment"><p>TLS group contains highly distinct outliers</p></li>
+</ul>
+</div></div>
+</section>
+<section class="slide level2">
+
+<h5 id="results-1">Results</h5>
+<h4 id="impact-of-idh-status-on-transcriptional-signatures">Impact of IDH status on transcriptional signatures</h4>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p><img data-src="images/IDH_status_PCA-01.png"></p>
+</div><div class="column" style="width:30%;">
+<ul>
+<li class="fragment"><p>Clear and distinct separation of samples by IDH status</p></li>
+<li class="fragment"><p>Outlier subsets exist</p></li>
+</ul>
+</div></div>
+</section>
+<section class="slide level2">
+
+<h5 id="results-2">Results</h5>
+<h4 id="tls-effect-on-gene-expression">TLS effect on gene expression</h4>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p><img data-src="images/volcano_plot.png"></p>
+</div><div class="column" style="width:30%;">
 <ul>
 <li class="fragment">Each point = one gene (TLS+ vs TLS−)</li>
 <li class="fragment">Several genes are significantly associated with TLS status (q &lt; 0.01)</li>
@@ -451,12 +491,12 @@ left_join()</code></pre>
 </section>
 <section class="slide level2">
 
-<h5 id="results-1">Results</h5>
-<h4 id="model-2-gep-score-by-tls-status">Model 2 – GEP score by TLS status</h4>
+<h5 id="results-3">Results</h5>
+<h4 id="gep-score-by-tls-status">GEP score by TLS status</h4>
 <div class="columns">
-<div class="column">
-<p><img data-src="../results/GEP_score_vs_TLS_status.png" style="width:100.0%"></p>
-</div><div class="column">
+<div class="column" style="width:70%;">
+<p><img data-src="images/GEP_score_vs_TLS_status.png"></p>
+</div><div class="column" style="width:30%;">
 <ul>
 <li class="fragment">Each point = one tumor sample</li>
 <li class="fragment">GEP score (18-gene immune signature)</li>
@@ -466,8 +506,26 @@ left_join()</code></pre>
 </section>
 <section class="slide level2">
 
-<h5 id="results-2">Results</h5>
-<h4 id="model-3-tls-and-clinical-features-fisher-tests">Model 3 – TLS and clinical features (Fisher tests)</h4>
+<h5 id="results-4">Results</h5>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p><img data-src="images/significant_genes_overlap.png"></p>
+</div><div class="column" style="width:30%;">
+
+</div></div>
+</section>
+<section class="slide level2">
+
+<h5 id="results-5">Results</h5>
+<h4 id="tls-and-clinical-features-fishers-tests">TLS and clinical features (Fisher’s tests)</h4>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><img data-src="images/TLS_vs_IDH_heatmap-03.png"></p>
+</div><div class="column" style="width:33%;">
+<p><img data-src="images/TLS_vs_tumor_status-03.png"></p>
+</div><div class="column" style="width:33%;">
+<p><img data-src="images/TLS_vs_gender-03.png"></p>
+</div></div>
 </section>
 <section id="discussion" class="slide level2">
 <h2>Discussion</h2>
