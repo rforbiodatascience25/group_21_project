@@ -12,16 +12,9 @@ format:
 
 ## Introduction
 
-#### Data set (article)
+![](images/Screenshot%202025-11-30%20at%2010.41.56.png){width="28cm" height="4cm"}
 
--   Description/motivation of dataset
--   Source
--   Biological problem
-
-#### Objectives
-
--   Project objectives
--   Objectives regarding biological problem
+![](images/Screenshot%202025-11-30%20at%2010.47.40.png){width="12cm" height="10cm"}
 
 ------------------------------------------------------------------------
 
