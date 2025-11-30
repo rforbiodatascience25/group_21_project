@@ -95,16 +95,23 @@ pca_tls <- pca_for_plots |>
       control = "lightsteelblue3"
     )
   ) +
-  theme_half_open(12) + 
+  theme_half_open(12) +
   background_grid() +
-  labs(title = "The first two PCs of transcription data, startified by TLS status",
-       x = "PC1",
-       y = "PC2")
+  labs(
+    color = "TLS status",
+    fill  = "TLS status",
+    title = "The first two PCs of transcription data, startified by TLS status",
+    x = "PC1",
+    y = "PC2"
+  ) +
+  theme(plot.title.position = "plot")
 
-ggsave(filename = "../results/TLS_status_PCA.png", 
-       plot = pca_tls, 
-       device = "png", 
-       bg = "white")
+ggsave(
+  filename = "../results/TLS_status_PCA.png",
+  plot = pca_tls,
+  device = "png",
+  bg = "white"
+)
 
 pca_tls
 ```
@@ -113,36 +120,42 @@ Generally speaking the majority of the datapoints lay in the same broad cluster 
 
 ```{r}
 pca_idh <- pca_for_plots |>
-  ggplot(aes(.fittedPC1, 
-             .fittedPC2, 
-             color = IDH_status, 
-             fill = IDH_status)) + 
-  geom_point(size = 1.8, 
-             alpha=1, 
+  ggplot(aes(.fittedPC1, .fittedPC2, color = IDH_status, fill = IDH_status)) +
+  geom_point(size = 1.8,
+             alpha = 1,
              shape = 21) +
   scale_fill_manual(
     values = c(
       IDH_mutant    = "indianred3",
       IDH_wild_type = "lightsteelblue2"
-    )
+    ),
+    labels = c(IDH_mutant = "IDH mutant", IDH_wild_type = "IDH wild type")
   ) +
   scale_color_manual(
     values = c(
       IDH_mutant    = "indianred4",
       IDH_wild_type = "lightsteelblue3"
-    )
+    ),
+    labels = c(IDH_mutant = "IDH mutant", IDH_wild_type = "IDH wild type")
   ) +
   theme_half_open(12) + 
   background_grid() +
-  labs(title = "The first two PCs of transcription data, startified by IDH status",
-       x = "PC1",
-       y = "PC2")
+  labs(
+    color = "IDH status",
+    fill  = "IDH status",
+    title = "The first two PCs of transcription data, startified by IDH status",
+    x = "PC1",
+    y = "PC2"
+  ) +
+  theme(plot.title.position = "plot")
 
 pca_idh
-ggsave(filename = "../results/IDH_status_PCA.png", 
-       plot = pca_idh, 
-       device = "png", 
-       bg = "white")
+ggsave(
+  filename = "../results/IDH_status_PCA.png",
+  plot = pca_idh,
+  device = "png",
+  bg = "white"
+)
 ```
 
 In a PCA Plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH Status, we can clearly see that the datapoints from IDH mutant samples and IDH wild type each cluster together, which was expected since the mutational status of the isocitrate dehydrogenase (IDH) induce broad metabolic and epigenetic reprogramming and therefore influences a lot of other expression levels of other genes. Also it should be noted that the cumulative variance explained by the PC1&2 is only about 20 %.
