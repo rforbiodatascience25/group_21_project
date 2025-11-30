@@ -1,4 +1,4 @@
-# group_21_project
+# Group 21 project
 ## Project contributors: 
 |           Name             | Student id |
 |----------------------------| ---------- |
@@ -12,3 +12,7 @@
 
 ## Presentation link: 
 https://raw.githack.com/rforbiodatascience25/group_21_project/main/doc/presentation.html
+
+## Data retrieval:
+The data is retrieved programmaticaly in the code. [Accessed: 30.11.2025] <br>
+Dataset can be obtained from: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059 [Accessed: 30.11.2025]
