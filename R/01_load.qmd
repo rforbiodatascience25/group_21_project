@@ -19,16 +19,39 @@ library("here")
 ## Load metadata
 
 ```{r}
+#| eval: true
+
+# Create data folder
+dir.create(here("data"), showWarnings = TRUE)
+dir.create(here("data/_raw"), showWarnings = TRUE)
+
+# Download metadata
+target_url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE271059&format=file&file=GSE271059%5Fmetadata%2Ecsv%2Egz"
+output_file <- "../data/_raw/GSE271059_metadata.csv.gz"
+curl::curl_download(url = target_url, destfile = output_file)
+```
+
+```{r}
 # Load metadata file
-metadata <- read_csv(here("data/_raw/GSE271059_metadata.csv"))
+
+metadata <- read_csv(here("data/_raw/GSE271059_metadata.csv.gz"))
 head(metadata)
 ```
 
 ## Load raw counts
 
 ```{r}
-# Load raw count matrix
-raw_counts <- read_csv(here("data/_raw/GSE271059_raw_counts.csv"))
+#| eval: true
+
+# Download raw count matrix
+target_url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE271059&format=file&file=GSE271059%5Fraw%5Fcounts%2Ecsv%2Egz"
+output_file <- "../data/_raw/GSE271059_raw_counts.csv.gz"
+curl::curl_download(url = target_url, destfile = output_file)
+```
+
+```{r}
+# Load raw counts matrix
+raw_counts <- read_csv(here("data/_raw/GSE271059_raw_counts.csv.gz"))
 head(raw_counts)
 ```
 
@@ -41,4 +64,3 @@ write_tsv(metadata,
 write_tsv(raw_counts, 
           file = here("data/01_dat_raw_counts.tsv"))
 ```
-
