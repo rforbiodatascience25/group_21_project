@@ -9,13 +9,14 @@ format:
     css: styles.css
     margin: 0.04
     embed-resources: true
+    footer: ""
 ---
 
 ## Introduction
 
-![](images/Screenshot_article_1.png){width="28cm" height="4cm"}
+![](images/Title_article.png){width="28cm" height="4cm"}
 
-![](images/Screenshot_article_2.png){width="12cm" height="10cm"}
+![](images/Graphical_summary_article.png){width="12cm" height="10cm"}
 
 ------------------------------------------------------------------------
 
@@ -23,15 +24,25 @@ format:
 
 #### Materials:
 
--   Main data: \[GEO (NCBI) - GSE271059\]
+-   Metadata: \[GEO (NCBI) - GSE271059\]
 
-    {<https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059>
+    -   IDH_status
 
-    <br>
+    -   TLS_status
 
--   Quantile Normalization and GEP score: \[Ayers et al., 2017\]
+    -   Localisation
 
-    <https://pubmed.ncbi.nlm.nih.gov/28650338/>
+    -   Primary_or_Recurrent
+
+    -   Age
+
+    -   Gender
+
+-   Raw data: gene expression count matrix (genes × samples)
+
+::: footer
+<https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059>
+:::
 
 ------------------------------------------------------------------------
 

@@ -12,6 +12,8 @@ editor: visual
 
 library("here")
 library("tidyverse")
+library("dplyr")
+library("ggplot2")
 source("99_proj_func.R")
 ```
 
@@ -19,10 +21,13 @@ source("99_proj_func.R")
 augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
 
 augmented_metadata <- augmented_metadata |>
-  mutate(TLS_status_bin = factor(TLS_status_bin),
-         IDH_status = factor(IDH_status),
-         Primary_or_Recurrent = factor(Primary_or_Recurrent),
-         Gender = factor(Gender))
+  mutate(
+    TLS_status_bin = factor(TLS_status_bin),
+    IDH_status = factor(IDH_status, 
+                        levels = c("IDH_wild_type", "IDH_mutant")), 
+    Primary_or_Recurrent = factor(Primary_or_Recurrent),
+    Gender = factor(Gender, 
+                    levels = c("M", "F")))
 ```
 
 ```{r}

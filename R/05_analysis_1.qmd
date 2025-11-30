@@ -81,37 +81,54 @@ volcano_plot <- gene_results |>
        y = expression(-log[10](p.value)),
        color = "Significant" ) +
   theme_minimal()
+
 ```
 
 ```{r}
 #Print volcano plot
 volcano_plot
-ggsave(filename = "volcano_plot.png",
-       path = here("results"),
-       dpi = 300)
+ggsave(
+  filename = "volcano_plot.png",
+  path = here("results"),
+  dpi = 300,
+  bg = "white"
+)
+```
+
+```{r}
+#Extracting p value from model 2
+tls_p <- gep_model_tidy |>
+  filter(term == "TLS_status_bin") |>  
+  pull(p.value)
 ```
 
 ```{r}
 #Plotting GEP score vs TLS status
-GEP_score_vs_TLS_status <- ggplot(augmented_metadata, 
-                                  aes(x = factor(TLS_status_bin), 
-                                      y = GEP_score,
-                                      fill = factor(TLS_status_bin))) +
-  geom_boxplot(width = 0.5,
+GEP_score_vs_TLS_status <- ggplot(
+  augmented_metadata, 
+  aes(x = factor(TLS_status_bin), 
+      y = GEP_score, 
+      fill = factor(TLS_status_bin))) +
+  geom_boxplot(width = 0.5, 
                alpha = 0.8, 
                color = "black") +
   scale_x_discrete(labels = c("0" = "No", "1" = "Yes")) +
-  geom_jitter(aes(color = factor(TLS_status_bin)),
-              width = 0.07,
-              alpha = 0.6,
-              size = 2) +
-  scale_fill_manual(values = c("0" = "lightsteelblue2",
+  geom_jitter(
+    aes(color = factor(TLS_status_bin)),
+    width = 0.07,
+    alpha = 0.6,
+    size = 2
+  ) +
+  scale_fill_manual(values = c("0" = "lightsteelblue2", 
                                "1" = "indianred3")) +
-  scale_color_manual(values = c("0" = "lightsteelblue4",
+  scale_color_manual(values = c("0" = "lightsteelblue4", 
                                 "1" = "indianred4")) +
-  labs(title = "GEP Score by TLS Status",
-       x = "TLS Status",
-       y = "GEP Score") +
+  labs(
+    title = paste0(
+      "GEP Score by TLS Status (p value = ", signif(tls_p, 3), ")"
+    ),
+    x = "TLS Status",
+    y = "GEP Score") +
   theme_classic(base_size = 15) +
   theme(legend.position = "none",
         plot.title = element_text(face = "bold", 
@@ -152,10 +169,12 @@ overlap_table
 ```
 
 ```{r}
-significant_genes_overlap <- ggplot(overlap_table, 
-                                    aes(x = In_TLS_Significant,
-                                        y = Gene,
-                                        color = In_TLS_Significant)) +
+#Plotting overlapping genes
+siginifcant_genes_overlap <- ggplot(overlap_table, aes(
+  x = In_TLS_Significant,
+  y = Gene,
+  color = In_TLS_Significant
+)) +
   geom_point(size = 4) +
   scale_x_discrete(labels = c("FALSE" = "No", "TRUE" = "Yes")) +
   scale_color_manual(values = c("FALSE" = "lightsteelblue4", "TRUE" = "indianred3")) +
@@ -163,19 +182,19 @@ significant_genes_overlap <- ggplot(overlap_table,
        x = "",
        y = "Gene") +
   theme_minimal(base_size = 13) +
-  theme(legend.position = "none",
-        panel.grid.major.y = element_line(color = "grey70", 
-                                          linewidth = 0.5),
-        panel.grid.major.x = element_line(color = "grey70", 
-                                          linewidth = 0.5),
-        panel.grid.minor.y = element_line(color = "grey70", 
-                                          linewidth = 0.3),
-        panel.grid.minor.x = element_line(color = "grey70", 
-                                          linewidth = 0.3))
+  theme(
+    legend.position = "none",
+    panel.grid.major.y = element_line(color = "grey70", linewidth = 0.5),
+    panel.grid.major.x = element_line(color = "grey70", linewidth = 0.5),
+    panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.3),
+    panel.grid.minor.x = element_line(color = "grey70", linewidth = 0.3),
+  )
 
-significant_genes_overlap
-
-ggsave(filename = "significant_genes_overlap.png",
-       path = here("results"),
-       dpi = 300)
+siginifcant_genes_overlap
+ggsave(
+  filename = "significant_genes_overlap.png",
+  path = here("results"),
+  dpi = 300,
+  bg = "white"
+)
 ```

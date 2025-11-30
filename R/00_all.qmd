@@ -9,6 +9,7 @@ editor: visual
 ```{r}
 library("quarto")
 library("here")
+library("tidyverse")
 ```
 
 ```{r}
@@ -79,3 +80,4 @@ file_copied <- png_results |>
                  to = paste0(here("doc/images/"), .x),
                  overwrite = TRUE))
 ```
+

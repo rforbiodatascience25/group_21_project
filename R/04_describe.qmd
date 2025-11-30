@@ -6,6 +6,8 @@ format:
 editor: visual
 ---
 
+# Load libraries
+
 ```{r}
 #| warning: false
 #| message: false
@@ -16,6 +18,8 @@ library("broom")
 library("table1")
 library("ggplot2")
 ```
+
+# Load data
 
 ```{r}
 #| warning: false
@@ -28,7 +32,7 @@ PCA_ready_table <- read_tsv("../data/03_augmented_table_PCA.tsv")
 
 # Table1
 
-Overview comparison table of samples with glioma intratumoral tertiary lymphoid structures (TLSs) and control group samples.
+Overview comparison table of samples with glioma intra-tumoral tertiary lymphoid structures (TLSs) and control group samples.
 
 ```{r}
 augmented_metadata_table2 <- augmented_metadata |>
@@ -43,7 +47,7 @@ htmltools::save_html(augmented_metadata_table2,
 augmented_metadata_table2
 ```
 
-Table mutational status of the isocitrate dehydrogenase (IDH) against IDH wild type.
+Table mutational status of isocitrate dehydrogenase (IDH) against IDH wild type.
 
 ```{r}
 augmented_metadata_table <- augmented_metadata |>
@@ -60,7 +64,7 @@ augmented_metadata_table
 
 # PCA
 
-We are doing the principle component analysis of the augmented data.
+Principle component analysis (PCA) of the augmented data was performed.
 
 ```{r}
 pca_fit <- PCA_ready_table |> 
@@ -72,7 +76,7 @@ pca_for_plots <- pca_fit |>
   augment(PCA_ready_table)
 ```
 
-First we take a look at the first two PCs of the PCA conducted on the RNA-seq gene expression matrix stratisfied by TLS Status.
+The first two PCs of the PCA conducted on the RNA-seq gene expression matrix stratified by TLS Status.
 
 ```{r}
 pca_tls <- pca_for_plots |>
@@ -95,57 +99,70 @@ pca_tls <- pca_for_plots |>
       control = "lightsteelblue3"
     )
   ) +
-  theme_half_open(12) + 
+  theme_half_open(12) +
   background_grid() +
-  labs(title = "The first two PCs of transcription data, startified by TLS status",
-       x = "PC1",
-       y = "PC2")
+  labs(
+    color = "TLS status",
+    fill  = "TLS status",
+    title = "The first two PCs of transcription data, startified by TLS status",
+    x = "PC1",
+    y = "PC2"
+  ) +
+  theme(plot.title.position = "plot")
 
-ggsave(filename = "../results/TLS_status_PCA.png", 
-       plot = pca_tls, 
-       device = "png", 
-       bg = "white")
+ggsave(
+  filename = "../results/TLS_status_PCA.png",
+  plot = pca_tls,
+  device = "png",
+  bg = "white"
+)
 
 pca_tls
 ```
 
-Generally speaking the majority of the datapoints lay in the same broad cluster in, both for control and TLS positive samples. We can estabilsh that there are some outliers for TLS positive samples that have a lower PC 2.
+The majority of the data points lay in the same broad cluster, both for control and TLS positive samples. There are some outliers for TLS positive samples that have a lower PC 2.
 
 ```{r}
 pca_idh <- pca_for_plots |>
-  ggplot(aes(.fittedPC1, 
-             .fittedPC2, 
-             color = IDH_status, 
-             fill = IDH_status)) + 
-  geom_point(size = 1.8, 
-             alpha=1, 
+  ggplot(aes(.fittedPC1, .fittedPC2, color = IDH_status, fill = IDH_status)) +
+  geom_point(size = 1.8,
+             alpha = 1,
              shape = 21) +
   scale_fill_manual(
     values = c(
       IDH_mutant    = "indianred3",
       IDH_wild_type = "lightsteelblue2"
-    )
+    ),
+    labels = c(IDH_mutant = "IDH mutant", IDH_wild_type = "IDH wild type")
   ) +
   scale_color_manual(
     values = c(
       IDH_mutant    = "indianred4",
       IDH_wild_type = "lightsteelblue3"
-    )
+    ),
+    labels = c(IDH_mutant = "IDH mutant", IDH_wild_type = "IDH wild type")
   ) +
   theme_half_open(12) + 
   background_grid() +
-  labs(title = "The first two PCs of transcription data, startified by IDH status",
-       x = "PC1",
-       y = "PC2")
+  labs(
+    color = "IDH status",
+    fill  = "IDH status",
+    title = "The first two PCs of transcription data, startified by IDH status",
+    x = "PC1",
+    y = "PC2"
+  ) +
+  theme(plot.title.position = "plot")
 
 pca_idh
-ggsave(filename = "../results/IDH_status_PCA.png", 
-       plot = pca_idh, 
-       device = "png", 
-       bg = "white")
+ggsave(
+  filename = "../results/IDH_status_PCA.png",
+  plot = pca_idh,
+  device = "png",
+  bg = "white"
+)
 ```
 
-In a PCA Plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH Status, we can clearly see that the datapoints from IDH mutant samples and IDH wild type each cluster together, which was expected since the mutational status of the isocitrate dehydrogenase (IDH) induce broad metabolic and epigenetic reprogramming and therefore influences a lot of other expression levels of other genes. Also it should be noted that the cumulative variance explained by the PC1&2 is only about 20 %.
+In a PCA plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH status, it can be clearly seen that the data points from IDH mutant samples and IDH wild type each cluster together. This is expected since the mutational status of the isocitrate dehydrogenase (IDH) induces broad metabolic and epigenetic reprogramming and therefore influences expression levels of other genes. It should be noted that the cumulative variance explained by PC1 & PC2 is only about 20%.
 
 ```{r}
 summary(pca_fit)$importance[3, 2]
@@ -159,7 +176,7 @@ summary(pca_fit)$importance
 loadings <- pca_fit$rotation
 ```
 
-Most important genes in proportion in the PC1 and PC2
+Most important genes in proportion in the PC1 and PC2:
 
 ```{r}
 top_PC1_pos <- loadings[, "PC1"] |> 
@@ -179,7 +196,7 @@ top_PC2_neg <- loadings[, "PC2"] |>
   head(20)
 ```
 
-Variance proportion expained by all PCs Plotted
+Variance proportion explained by all PCs plotted:
 
 ```{r}
 var_explained <- summary(pca_fit)$importance["Proportion of Variance", ]
