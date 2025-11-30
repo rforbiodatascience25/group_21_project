@@ -46,27 +46,37 @@ format:
 ::: panel-tabset
 ## Data Loading and Cleaning
 
-```         
-read_csv()
+-   **Loading data**
 
-Replacing "Not_Available" with NA
+    -   read_csv()
 
-distinct()
+-   **Cleaning data**
 
-Standardizing names
-```
+    -   Replacing "Not_Available" with NA
+
+    -   Removing duplicates: distinct()
+
+    -   Standardizing names
 
 ## Data Augmentation
 
-```         
-Creating age groups
+-   **Creating new metadata columns**
 
-Normalizing counts and calculating GEP scores
+    -   Age_groups
 
-pivot_longer()
+    -   TLS_status_bin
 
-left_join()
-```
+-   **Normalizing gene expression**
+
+    -   cpm_normalization
+
+    -   quantile_normalization
+
+-   **Computing GEP scores**
+
+-   **Combining normalized counts with metadata**
+
+-   **Preparing data for PCA/downstream analysis**
 :::
 
 ------------------------------------------------------------------------
@@ -76,12 +86,11 @@ left_join()
 ::: panel-tabset
 ## Descriptive Statistics
 
-
 -   **Baseline tables**
 
     -   TLS_status: IDH_status, Gender, Age, Localisation
     -   IDH_status: TLS_status, Gender, Age, Localisation
-    
+
 -   **PCA on gene expression**
 
     -   PC1–PC2 coloured by TLS_status
@@ -105,44 +114,107 @@ left_join()
 
 ##### Results
 
-#### Model 1 – TLS effect on gene expression
+#### Impact of TLS status on transcriptional signatures
 
-::: columns
-::: column
-![](../results/volcano_plot.png){width="100%"}
+::::: columns
+::: {.column width="50%"}
+![](images/TLS_status_PCA-03.png)
 :::
 
-::: column
-- Each point = one gene (TLS+ vs TLS−)
-- Several genes are significantly associated with TLS status (q < 0.01)
-- Some genes higher in TLS+, others in controls  
-  → TLS status is linked to differences in gene expression
+::: {.column width="50%"}
+-   TLS status does not strongly separate the samples
+
+-   TLS group contains highly distinct outliers
 :::
-:::
+:::::
+
 ------------------------------------------------------------------------
 
 ##### Results
 
-#### Model 2 – GEP score by TLS status
+#### Impact of IDH status on transcriptional signatures
 
-::: columns
-::: column
-![](../results/GEP_score_vs_TLS_status.png){width="100%"}
+::::: columns
+::: {.column width="70%"}
+![](images/IDH_status_PCA-01.png)
 :::
 
-::: column
-- Each point = one tumor sample
-- GEP score (18-gene immune signature)
-- Median GEP score is higher in TLS+ tumors than in controls
+::: {.column width="30%"}
+-   Clear and distinct separation of samples by IDH status
+
+-   Outlier subsets exist
 :::
-:::
+:::::
+
 ------------------------------------------------------------------------
 
 ##### Results
 
-#### Model 3 – TLS and clinical features (Fisher tests)
+#### TLS effect on gene expression
 
-   
+::::: columns
+::: {.column width="70%"}
+![](images/volcano_plot.png)
+:::
+
+::: {.column width="30%"}
+-   Each point = one gene (TLS+ vs TLS−)
+-   Several genes are significantly associated with TLS status (q \< 0.01)
+-   Some genes higher in TLS+, others in controls\
+    → TLS status is linked to differences in gene expression
+:::
+:::::
+
+------------------------------------------------------------------------
+
+##### Results
+
+#### GEP score by TLS status
+
+::::: columns
+::: {.column width="70%"}
+![](images/GEP_score_vs_TLS_status.png)
+:::
+
+::: {.column width="30%"}
+-   Each point = one tumor sample
+-   GEP score (18-gene immune signature)
+-   Median GEP score is higher in TLS+ tumors than in controls
+:::
+:::::
+
+------------------------------------------------------------------------
+
+##### Results
+
+::::: columns
+::: {.column width="70%"}
+![](images/significant_genes_overlap.png)
+:::
+
+::: {.column width="30%"}
+:::
+:::::
+
+------------------------------------------------------------------------
+
+##### Results
+
+#### TLS and clinical features (Fisher's tests)
+
+:::::: columns
+::: {.column width="33%"}
+![](images/TLS_vs_IDH_heatmap-03.png)
+:::
+
+::: {.column width="33%"}
+![](images/TLS_vs_tumor_status-03.png)
+:::
+
+::: {.column width="33%"}
+![](images/TLS_vs_gender-03.png)
+:::
+::::::
 
 ------------------------------------------------------------------------
 
