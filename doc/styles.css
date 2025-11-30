@@ -13,3 +13,17 @@
 .reveal .slides ol {
   font-size: 22pt;
 }
+
+.reveal .slides section .footer,
+.reveal .slides section .slide-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  text-align: left;
+}
+
+.reveal .slides section .footer span,
+.reveal .slides section .slide-footer span {
+  font-size: 0.5em;
+}

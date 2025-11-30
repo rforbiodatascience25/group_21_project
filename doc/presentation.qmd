@@ -1,30 +1,32 @@
 ---
-title: "Functional Tertiary Lymphoid Structures in Human Gliomas"
+title: "Association of Tumor-Localizated TLS with Gene Expression Profile in Glioma Samples"
 author: "Group 21"
 format:
   revealjs:
-    incremental: true  
     theme: serif
     slide-number: true
+    center: false
     css: styles.css
     margin: 0.04
     embed-resources: true
     footer: ""
 ---
 
-## Introduction
+#### Introduction
 
-![](images/Title_article.png){width="28cm" height="4cm"}
+**Study: "Spatial immune profiling defines a subset of human gliomas with functional tertiary lymphoid structures"**^\[1\]^
 
-![](images/Graphical_summary_article.png){width="12cm" height="10cm"}
+![](images/Graphical_summary_article.png){width="11cm" height="10cm" fig-align="left"}
+
+::: footer[
+<span style="font-size:0.5em;"> \[1\] Pinar Cakmak, Lun JH, Singh A, et al. Spatial immune profiling defines a subset of human gliomas with functional tertiary lymphoid structures. Immunity. 2025;58(11):2847-2863.e8. <a href="https://doi.org/10.1016/j.immuni.2025.09.018"> \[doi\] </a>
+:::
 
 ------------------------------------------------------------------------
 
-## Materials and Methods
-
 #### Materials:
 
--   Metadata: \[GEO (NCBI) - GSE271059\]
+-   Metadata: GEO (NCBI) - GSE271059^\[2\]^
 
     -   IDH_status
 
@@ -40,93 +42,38 @@ format:
 
 -   Raw data: gene expression count matrix (genes × samples)
 
-::: footer
-<https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059>
+<br>
+
+<br>
+
+<br>
+
+::: footer[
+[\[2\] GEO series GSE271059 – <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059"> https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059 </a>]{style="font-size:0.5em;"}
 :::
 
 ------------------------------------------------------------------------
 
-#### Methods:
+#### Methods
 
-::: panel-tabset
-## Data Loading and Cleaning
+![](images/flow_chart_methods.drawio.png){width="80%"}
 
--   **Loading data**
-
-    -   read_csv()
-
--   **Cleaning data**
-
-    -   Replacing "Not_Available" with NA
-
-    -   Removing duplicates: distinct()
-
-    -   Standardizing names
-
-## Data Augmentation
-
--   **Creating new metadata columns**
-
-    -   Age_groups
-
-    -   TLS_status_bin
-
--   **Normalizing gene expression**
-
-    -   cpm_normalization
-
-    -   quantile_normalization
-
--   **Computing GEP scores**
-
--   **Combining normalized counts with metadata**
-
--   **Preparing data for PCA/downstream analysis**
+::: footer[
+[\[3\] Ayers et al., 2017 – <a href="https://pubmed.ncbi.nlm.nih.gov/28650338/">https://pubmed.ncbi.nlm.nih.gov/28650338/</a>]{style="font-size:0.5em;"}
 :::
 
 ------------------------------------------------------------------------
 
-#### Methods:
+#### Results
 
-::: panel-tabset
-## Descriptive Statistics
-
--   **Baseline tables**
-
-    -   TLS_status: IDH_status, Gender, Age, Localisation
-    -   IDH_status: TLS_status, Gender, Age, Localisation
-
--   **PCA on gene expression**
-
-    -   PC1–PC2 coloured by TLS_status
-    -   PC1–PC2 coloured by IDH_status
-    -   Variance explained by PCs
-
-## Statistical Models
-
--   **Model 1 – TLS effect on gene expression**
-    -   CPM_log2 \~ TLS_status_bin
-    -   Output: volcano plot (TLS+ vs TLS−)
--   **Model 2 – GEP scoreby TLS status**
-    -   GEP_score \~ TLS_status_bin
--   **Model 3 – TLS and clinical features (Fisher tests)**
-    -   TLS_status_bin vs IDH_status
-    -   TLS_status_bin vs Primary/Recurrent
-    -   TLS_status_bin vs Gender
-:::
-
-------------------------------------------------------------------------
-
-##### Results
-
-#### Impact of TLS status on transcriptional signatures
+##### Impact of TLS status on transcriptional signatures
 
 ::::: columns
-::: {.column width="50%"}
+::: {.column width="70%"}
 ![](images/TLS_status_PCA.png)
 :::
 
-::: {.column width="50%"}
+::: {.column width="30%"}
 -   TLS status does not strongly separate the samples
 
 -   TLS group contains highly distinct outliers
@@ -135,9 +82,9 @@ format:
 
 ------------------------------------------------------------------------
 
-##### Results
+#### Results
 
-#### Impact of IDH status on transcriptional signatures
+##### Impact of IDH status on transcriptional signatures
 
 ::::: columns
 ::: {.column width="70%"}
@@ -153,9 +100,9 @@ format:
 
 ------------------------------------------------------------------------
 
-##### Results
+#### Results
 
-#### TLS effect on gene expression
+##### TLS effect on gene expression
 
 ::::: columns
 ::: {.column width="70%"}
@@ -164,7 +111,7 @@ format:
 
 ::: {.column width="30%"}
 -   Each point = one gene (TLS+ vs TLS−)
--   Several genes are significantly associated with TLS status (q \< 0.01)
+-   Several genes are significantly associated with TLS status (q \< 0.05)
 -   Some genes higher in TLS+, others in controls\
     → TLS status is linked to differences in gene expression
 :::
@@ -172,9 +119,9 @@ format:
 
 ------------------------------------------------------------------------
 
-##### Results
+#### Results
 
-#### GEP score by TLS status
+##### GEP score by TLS status
 
 ::::: columns
 ::: {.column width="70%"}
@@ -190,7 +137,7 @@ format:
 
 ------------------------------------------------------------------------
 
-##### Results
+#### Results
 
 ::::: columns
 ::: {.column width="70%"}
@@ -198,29 +145,10 @@ format:
 :::
 
 ::: {.column width="30%"}
+-   Three genes were found to be TLS-significant
 :::
 :::::
 
 ------------------------------------------------------------------------
 
-##### Results
-
-#### TLS and clinical features (Fisher's tests)
-
-:::::: columns
-::: {.column width="33%"}
-![](images/TLS_vs_IDH_heatmap.png)
-:::
-
-::: {.column width="33%"}
-![](images/TLS_vs_tumor_status.png)
-:::
-
-::: {.column width="33%"}
-![](images/TLS_vs_gender.png)
-:::
-::::::
-
-------------------------------------------------------------------------
-
-## Discussion
+#### Discussion
