@@ -30,6 +30,8 @@ augmented_metadata <- augmented_metadata |>
                     levels = c("M", "F")))
 ```
 
+Fisher's test was performed; however, none of the tests revealed significance, and hence, it was not included in the presentation.
+
 ```{r}
 fisher_idh <- run_fisher_test(augmented_metadata,
                               "TLS_status_bin", 
