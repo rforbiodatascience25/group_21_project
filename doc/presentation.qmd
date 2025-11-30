@@ -123,7 +123,7 @@ format:
 
 ::::: columns
 ::: {.column width="50%"}
-![](images/TLS_status_PCA-03.png)
+![](images/TLS_status_PCA.png)
 :::
 
 ::: {.column width="50%"}
@@ -141,7 +141,7 @@ format:
 
 ::::: columns
 ::: {.column width="70%"}
-![](images/IDH_status_PCA-01.png)
+![](images/IDH_status_PCA.png)
 :::
 
 ::: {.column width="30%"}
@@ -209,15 +209,15 @@ format:
 
 :::::: columns
 ::: {.column width="33%"}
-![](images/TLS_vs_IDH_heatmap-03.png)
+![](images/TLS_vs_IDH_heatmap.png)
 :::
 
 ::: {.column width="33%"}
-![](images/TLS_vs_tumor_status-03.png)
+![](images/TLS_vs_tumor_status.png)
 :::
 
 ::: {.column width="33%"}
-![](images/TLS_vs_gender-03.png)
+![](images/TLS_vs_gender.png)
 :::
 ::::::
 
