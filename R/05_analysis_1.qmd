@@ -77,17 +77,24 @@ volcano_plot
 ggsave(
   filename = "volcano_plot.png",
   path = here("results"),
-  dpi = 300
+  dpi = 300,
+  bg = "white"
 )
 ```
 
 ```{r}
+#Extracting p value from model 2
+tls_p <- gep_model_tidy |>
+  filter(term == "TLS_status_bin") |>  
+  pull(p.value)
+```
+
+```{r}
 #Plotting GEP score vs TLS status
-GEP_score_vs_TLS_status <- ggplot(augmented_metadata, aes(
-  x = factor(TLS_status_bin),
-  y = GEP_score,
-  fill = factor(TLS_status_bin)
-)) +
+GEP_score_vs_TLS_status <- ggplot(
+  augmented_metadata, 
+  aes(x = factor(TLS_status_bin), y = GEP_score, fill = factor(TLS_status_bin))
+) +
   geom_boxplot(width = 0.5, alpha = 0.8, color = "black") +
   scale_x_discrete(labels = c("0" = "No", "1" = "Yes")) +
   geom_jitter(
@@ -96,14 +103,12 @@ GEP_score_vs_TLS_status <- ggplot(augmented_metadata, aes(
     alpha = 0.6,
     size = 2
   ) +
-  scale_fill_manual(
-    values = c("0" = "lightsteelblue2", "1" = "indianred3")
-  ) +
-  scale_color_manual(
-    values = c("0" = "lightsteelblue4", "1" = "indianred4")
-  ) +
+  scale_fill_manual(values = c("0" = "lightsteelblue2", "1" = "indianred3")) +
+  scale_color_manual(values = c("0" = "lightsteelblue4", "1" = "indianred4")) +
   labs(
-    title = "GEP Score by TLS Status",
+    title = paste0(
+      "GEP Score by TLS Status (LM p = ", signif(tls_p, 3), ")"
+    ),
     x = "TLS Status",
     y = "GEP Score"
   ) +
@@ -150,6 +155,7 @@ overlap_table
 ```
 
 ```{r}
+#Plotting overlapping genes
 siginifcant_genes_overlap <- ggplot(overlap_table, aes(
   x = In_TLS_Significant,
   y = Gene,
@@ -169,15 +175,15 @@ siginifcant_genes_overlap <- ggplot(overlap_table, aes(
     panel.grid.major.y = element_line(color = "grey70", linewidth = 0.5),
     panel.grid.major.x = element_line(color = "grey70", linewidth = 0.5),
     panel.grid.minor.y = element_line(color = "grey70", linewidth = 0.3),
-    panel.grid.minor.x = element_line(color = "grey70", linewidth = 0.3)
+    panel.grid.minor.x = element_line(color = "grey70", linewidth = 0.3),
   )
-
 
 siginifcant_genes_overlap
 ggsave(
   filename = "siginificant_genes_overlap.png",
   path = here("results"),
-  dpi = 300
+  dpi = 300,
+  bg = "white"
 )
 
 ```

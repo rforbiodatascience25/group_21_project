@@ -12,6 +12,8 @@ editor: visual
 
 library("here")
 library("tidyverse")
+library("dplyr")
+library("ggplot2")
 source("99_proj_func.R")
 ```
 
@@ -21,9 +23,10 @@ augmented_metadata <- read_tsv("../data/03_augmented_metadata.tsv")
 augmented_metadata <- augmented_metadata |>
   mutate(
     TLS_status_bin = factor(TLS_status_bin),
-    IDH_status = factor(IDH_status),
+    IDH_status = factor(IDH_status, 
+                        levels = c("IDH_wild_type", "IDH_mutant")),  # order set here
     Primary_or_Recurrent = factor(Primary_or_Recurrent),
-    Gender = factor(Gender)
+    Gender = factor(Gender, levels = c("M", "F"))
   )
 ```
 
@@ -40,9 +43,6 @@ list(
 ```
 
 ```{r}
-library(dplyr)
-library(ggplot2)
-
 tls_idh_counts <- augmented_metadata %>%
   count(TLS_status_bin, IDH_status)
 
@@ -59,6 +59,7 @@ heatmap_idh <- ggplot(tls_idh_counts, aes(x = IDH_status, y = TLS_status_bin, fi
   geom_tile(color = "white") +
   geom_text(aes(label = n)) +
   scale_fill_gradient(name = "Count", low = "white", high = "lightsteelblue3") +
+  scale_x_discrete(labels = c("IDH_mutant" = "IDH mutant", "IDH_wild_type" = "IDH wild type"))+
   scale_y_discrete(labels = c("0" = "Absent", "1" = "Present")) +
   labs(
     title = paste0(
@@ -131,4 +132,3 @@ ggsave(
   dpi = 300
 )
 ```
-
