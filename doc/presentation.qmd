@@ -8,13 +8,14 @@ format:
     slide-number: true
     css: styles.css
     margin: 0.04
+    embed-resources: true
 ---
 
 ## Introduction
 
-![](images/Screenshot%202025-11-30%20at%2010.41.56.png){width="28cm" height="4cm"}
+![](images/Screenshot_article_1.png){width="28cm" height="4cm"}
 
-![](images/Screenshot%202025-11-30%20at%2010.47.40.png){width="12cm" height="10cm"}
+![](images/Screenshot_article_2.png){width="12cm" height="10cm"}
 
 ------------------------------------------------------------------------
 

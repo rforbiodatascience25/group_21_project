@@ -42,9 +42,6 @@ list(TLS_vs_IDH = fisher_idh,
 ```
 
 ```{r}
-library(dplyr)
-library(ggplot2)
-
 tls_idh_counts <- augmented_metadata |>
   count(TLS_status_bin, 
         IDH_status)

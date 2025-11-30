@@ -71,3 +71,11 @@ file.rename(from = here("R/06_analysis_2.html"),
             to = here("results/06_analysis_2.html"))
 ```
 
+```{r}
+png_results <- list.files(path = here("results"), pattern = ".png")
+
+file_copied <- png_results |>
+  map(~file.copy(from = paste0(here("results/"), .x),
+                 to = paste0(here("doc/images/"), .x),
+                 overwrite = TRUE))
+```
