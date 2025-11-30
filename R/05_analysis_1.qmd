@@ -46,7 +46,7 @@ gene_results <- nested_data |>
          conf.high) |>
   mutate(q.value = p.adjust(p.value, 
                             method = "fdr"),
-         significant = q.value < 0.01)
+         significant = q.value < 0.05)
 ```
 
 ```{r}
