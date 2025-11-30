@@ -8,6 +8,7 @@ format:
     slide-number: true
     css: styles.css
     margin: 0.04
+    footer: ""
 ---
 
 ## Introduction
@@ -22,15 +23,25 @@ format:
 
 #### Materials:
 
--   Main data: \[GEO (NCBI) - GSE271059\]
+-   Metadata: \[GEO (NCBI) - GSE271059\]
 
-    {<https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059>
+    -   IDH_status
 
-    <br>
+    -   TLS_status
 
--   Quantile Normalization and GEP score: \[Ayers et al., 2017\]
+    -   Localisation
 
-    <https://pubmed.ncbi.nlm.nih.gov/28650338/>
+    -   Primary_or_Recurrent
+
+    -   Age
+
+    -   Gender
+
+-   Raw data: gene expression count matrix (genes × samples)
+
+::: footer
+<https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE271059>
+:::
 
 ------------------------------------------------------------------------
 
