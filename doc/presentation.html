@@ -393,13 +393,81 @@ left_join()</code></pre>
 <section class="slide level2">
 
 <h4 id="methods-1">Methods:</h4>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Descriptive Statistics</a></li><li><a href="#tabset-2-2">Statistical Models</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
 <ul>
-<li class="fragment"><p>describing</p></li>
-<li class="fragment"><p>Analysis (Modeling)</p></li>
+<li class="fragment"><p><strong>Baseline tables</strong></p>
+<ul>
+<li class="fragment">TLS_status: IDH_status, Gender, Age, Localisation</li>
+<li class="fragment">IDH_status: TLS_status, Gender, Age, Localisation</li>
+</ul></li>
+<li class="fragment"><p><strong>PCA on gene expression</strong></p>
+<ul>
+<li class="fragment">PC1–PC2 coloured by TLS_status</li>
+<li class="fragment">PC1–PC2 coloured by IDH_status</li>
+<li class="fragment">Variance explained by PCs</li>
+</ul></li>
 </ul>
+</div>
+<div id="tabset-2-2">
+<ul>
+<li class="fragment"><strong>Model 1 – TLS effect on gene expression</strong>
+<ul>
+<li class="fragment">CPM_log2 ~ TLS_status_bin</li>
+<li class="fragment">Output: volcano plot (TLS+ vs TLS−)</li>
+</ul></li>
+<li class="fragment"><strong>Model 2 – GEP scoreby TLS status</strong>
+<ul>
+<li class="fragment">GEP_score ~ TLS_status_bin</li>
+</ul></li>
+<li class="fragment"><strong>Model 3 – TLS and clinical features (Fisher tests)</strong>
+<ul>
+<li class="fragment">TLS_status_bin vs IDH_status</li>
+<li class="fragment">TLS_status_bin vs Primary/Recurrent</li>
+<li class="fragment">TLS_status_bin vs Gender</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
 </section>
-<section id="results" class="slide level2">
-<h2>Results</h2>
+<section class="slide level2">
+
+<h5 id="results">Results</h5>
+<h4 id="model-1-tls-effect-on-gene-expression">Model 1 – TLS effect on gene expression</h4>
+<div class="columns">
+<div class="column">
+<p><img data-src="../results/volcano_plot.png" style="width:100.0%"></p>
+</div><div class="column">
+<ul>
+<li class="fragment">Each point = one gene (TLS+ vs TLS−)</li>
+<li class="fragment">Several genes are significantly associated with TLS status (q &lt; 0.01)</li>
+<li class="fragment">Some genes higher in TLS+, others in controls<br>
+→ TLS status is linked to differences in gene expression</li>
+</ul>
+</div></div>
+</section>
+<section class="slide level2">
+
+<h5 id="results-1">Results</h5>
+<h4 id="model-2-gep-score-by-tls-status">Model 2 – GEP score by TLS status</h4>
+<div class="columns">
+<div class="column">
+<p><img data-src="../results/GEP_score_vs_TLS_status.png" style="width:100.0%"></p>
+</div><div class="column">
+<ul>
+<li class="fragment">Each point = one tumor sample</li>
+<li class="fragment">GEP score (18-gene immune signature)</li>
+<li class="fragment">Median GEP score is higher in TLS+ tumors than in controls</li>
+</ul>
+</div></div>
+</section>
+<section class="slide level2">
+
+<h5 id="results-2">Results</h5>
+<h4 id="model-3-tls-and-clinical-features-fisher-tests">Model 3 – TLS and clinical features (Fisher tests)</h4>
 </section>
 <section id="discussion" class="slide level2">
 <h2>Discussion</h2>
@@ -590,7 +658,7 @@ left_join()</code></pre>
         height: 700,
 
         // Factor of the display size that should remain empty around the content
-        margin: 0.1,
+        margin: 4.0e-2,
 
         math: {
           mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',

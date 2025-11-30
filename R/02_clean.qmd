@@ -6,13 +6,18 @@ format:
 editor: visual
 ---
 
+## Load libraries
+
 ```{r}
 #| warning: false
 #| message: false
 
-# Load libraries
 library("tidyverse")
+```
 
+## Load and clean metadata
+
+```{r}
 # Load metadata
 metadata <- read_tsv("../data/01_dat_metadata.tsv")
 
@@ -33,8 +38,12 @@ metadata_clean <- metadata |>
     "Infratentoriel" = "Infratentorial",
     .default = Localisation
   )) |>
-  distinct(Patient, Sample_names, .keep_all = TRUE)
+  distinct(Patient, 
+           Sample_names, 
+           .keep_all = TRUE)
 
 # Save cleaned metadata
-write_tsv(metadata_clean, "../data/02_dat_metadata_clean.tsv")
+write_tsv(metadata_clean, 
+          file = "../data/02_dat_metadata_clean.tsv")
 ```
+
