@@ -174,11 +174,11 @@ Three genes were found to be TLS-significant
 
 #### Discussion
 
--   PCA: TLS and control tumours largely overlap → TLS is not the main driver of variation.
--   PCA: clear separation by IDH status → strong impact of IDH mutations on expression.
--   PC1 + PC2 explain \~20% of variance in a \>40,000-dimensional dataset.
--   TLS gliomas show widespread transcriptional differences compared with controls.
--   TLS samples have higher immune GEP scores → more active adaptive immune responses.
--   Only 3 GEP genes are individually significant → Coordinated moderate changes rather than strong effects per gene
--   Overall, TLS gliomas have a more active immune microenvironment; GEP scores could potentially help predict response to immunotherapy
--   Limitations: limited sample size, unaccounted confounders (e.g. sex, IDH), and simple linear models
+-   PCA: TLS and control tumours largely overlap → TLS is not the main driver of variation
+-   PCA: clear separation by IDH status → strong impact of IDH mutations on expression
+-   PC1 + PC2 explain \~20% of variance in a \> 40,000-dimensional dataset
+-   TLS gliomas show widespread transcriptional differences compared with controls
+-   TLS samples have higher immune GEP scores → more active adaptive immune responses
+-   Only 3 GEP genes are individually significant
+-   TLS gliomas have a more active immune microenvironment
+-   Limitations apply
