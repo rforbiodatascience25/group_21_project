@@ -27,3 +27,7 @@
 .reveal .slides section .slide-footer span {
   font-size: 0.5em;
 }
+
+.quarto-title-author-name {
+  font-size: 16pt !important;
+}
