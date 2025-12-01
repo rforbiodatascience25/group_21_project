@@ -172,3 +172,9 @@ Objectives:
 ------------------------------------------------------------------------
 
 #### Discussion
+
+-   PCA: TLS+ and control tumors largely overlap -\> TLS is not the main driver of variation
+-   PCA: clear separation by IDH status -\> Strong impact of IDH mutations on expression
+-   TLS+ gliomas show transcriptional differences compared with controls
+-   TLS+ samples have higher immune GEP scores -\> More active adaptive immune response
+-   Overall, gliomas with TLS display a more active immune microenvironment
