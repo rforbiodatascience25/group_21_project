@@ -39,14 +39,16 @@ Objectives:
 :::::
 
 ::: footer[
-<span style="font-size:0.5em;"> \[1\] Pinar Cakmak, Lun JH, Singh A, et al. Spatial immune profiling defines a subset of human gliomas with functional tertiary lymphoid structures. Immunity. 2025;58(11):2847-2863.e8. <a href="https://doi.org/10.1016/j.immuni.2025.09.018"> \[doi\] </a>
+<span style="font-size:0.5em;"> \[1\] Cakmak et al., 2025 – <a href="https://doi.org/10.1016/j.immuni.2025.09.018"> https://doi.org/10.1016/j.immuni.2025.09.018 </a>
 :::
 
 ------------------------------------------------------------------------
 
 #### Materials:
 
--   Metadata: GEO (NCBI) - GSE271059^\[2\]^
+Dataset: GEO (NCBI) - GSE271059^\[2\]^ <br>
+
+-   Metadata:
 
     -   IDH_status
 
@@ -61,8 +63,6 @@ Objectives:
     -   Gender
 
 -   Raw data: gene expression count matrix (genes × samples)
-
-<br>
 
 <br>
 
@@ -132,8 +132,7 @@ Objectives:
 ::: {.column width="30%"}
 -   Each point = one gene (TLS+ vs TLS−)
 -   Several genes are significantly associated with TLS status (q \< 0.05)
--   Some genes higher in TLS+, others in controls\
-    → TLS status is linked to differences in gene expression
+-   Some genes are higher in TLS+, others in controls
 :::
 :::::
 

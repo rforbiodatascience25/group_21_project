@@ -3197,6 +3197,8 @@ white-space: normal;
 </header>
 
 
+<section id="load-libraries" class="level1">
+<h1>Load libraries</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;cowplot&quot;</span>)</span>
@@ -3204,14 +3206,18 @@ white-space: normal;
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;table1&quot;</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggplot2&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="load-data" class="level1">
+<h1>Load data</h1>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>augmented_table <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;../data/03_augmented_table.tsv&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>augmented_metadata <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;../data/03_augmented_metadata.tsv&quot;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>PCA_ready_table <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;../data/03_augmented_table_PCA.tsv&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
 <section id="table1" class="level1">
 <h1>Table1</h1>
-<p>Overview comparison table of samples with glioma intratumoral tertiary lymphoid structures (TLSs) and control group samples.</p>
+<p>Overview comparison table of samples with glioma intra-tumoral tertiary lymphoid structures (TLSs) and control group samples.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>augmented_metadata_table2 <span class="ot">&lt;-</span> augmented_metadata <span class="sc">|&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Gender =</span> <span class="fu">factor</span>(Gender),</span>
@@ -3394,7 +3400,7 @@ white-space: normal;
 </div>
 </div>
 </div>
-<p>Table mutational status of the isocitrate dehydrogenase (IDH) against IDH wild type.</p>
+<p>Table mutational status of isocitrate dehydrogenase (IDH) against IDH wild type.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>augmented_metadata_table <span class="ot">&lt;-</span> augmented_metadata <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Gender =</span> <span class="fu">factor</span>(Gender),</span>
@@ -3580,7 +3586,7 @@ white-space: normal;
 </section>
 <section id="pca" class="level1">
 <h1>PCA</h1>
-<p>We are doing the principle component analysis of the augmented data.</p>
+<p>Principle component analysis (PCA) of the augmented data was performed.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pca_fit <span class="ot">&lt;-</span> PCA_ready_table <span class="sc">|&gt;</span> </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span> </span>
@@ -3590,7 +3596,7 @@ white-space: normal;
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>pca_for_plots <span class="ot">&lt;-</span> pca_fit <span class="sc">|&gt;</span> </span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(PCA_ready_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>First we take a look at the first two PCs of the PCA conducted on the RNA-seq gene expression matrix stratisfied by TLS Status.</p>
+<p>The first two PCs of the PCA conducted on the RNA-seq gene expression matrix stratified by TLS Status.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pca_tls <span class="ot">&lt;-</span> pca_for_plots <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(.fittedPC1, </span>
@@ -4040,7 +4046,7 @@ white-space: normal;
 </div>
 </div>
 </div>
-<p>Generally speaking the majority of the datapoints lay in the same broad cluster in, both for control and TLS positive samples. We can estabilsh that there are some outliers for TLS positive samples that have a lower PC 2.</p>
+<p>The majority of the data points lay in the same broad cluster, both for control and TLS positive samples. There are some outliers for TLS positive samples that have a lower PC 2.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pca_idh <span class="ot">&lt;-</span> pca_for_plots <span class="sc">|&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(.fittedPC1, .fittedPC2, <span class="at">color =</span> IDH_status, <span class="at">fill =</span> IDH_status)) <span class="sc">+</span></span>
@@ -4525,7 +4531,7 @@ white-space: normal;
 <pre><code>Saving 7 x 5 in image</code></pre>
 </div>
 </div>
-<p>In a PCA Plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH Status, we can clearly see that the datapoints from IDH mutant samples and IDH wild type each cluster together, which was expected since the mutational status of the isocitrate dehydrogenase (IDH) induce broad metabolic and epigenetic reprogramming and therefore influences a lot of other expression levels of other genes. Also it should be noted that the cumulative variance explained by the PC1&amp;2 is only about 20 %.</p>
+<p>In a PCA plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH status, it can be clearly seen that the data points from IDH mutant samples and IDH wild type each cluster together. This is expected since the mutational status of the isocitrate dehydrogenase (IDH) induces broad metabolic and epigenetic reprogramming and therefore influences expression levels of other genes. It should be noted that the cumulative variance explained by PC1 &amp; PC2 is only about 20%.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca_fit)<span class="sc">$</span>importance[<span class="dv">3</span>, <span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -4584,7 +4590,7 @@ Cumulative Proportion   0.99209  0.99618  1.00000 1.000000e+00</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>loadings <span class="ot">&lt;-</span> pca_fit<span class="sc">$</span>rotation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Most important genes in proportion in the PC1 and PC2</p>
+<p>Most important genes in proportion in the PC1 and PC2:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>top_PC1_pos <span class="ot">&lt;-</span> loadings[, <span class="st">&quot;PC1&quot;</span>] <span class="sc">|&gt;</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
@@ -4601,7 +4607,7 @@ Cumulative Proportion   0.99209  0.99618  1.00000 1.000000e+00</code></pre>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Variance proportion expained by all PCs Plotted</p>
+<p>Variance proportion explained by all PCs plotted:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>var_explained <span class="ot">&lt;-</span> <span class="fu">summary</span>(pca_fit)<span class="sc">$</span>importance[<span class="st">&quot;Proportion of Variance&quot;</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
