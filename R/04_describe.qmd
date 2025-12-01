@@ -162,7 +162,7 @@ ggsave(
 )
 ```
 
-In a PCA plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH status, it can be clearly seen that the data points from IDH mutant samples and IDH wild type each cluster together. This is expected since the mutational status of the isocitrate dehydrogenase (IDH) induces broad metabolic and epigenetic reprogramming and therefore influences expression levels of other genes. It should be noted that the cumulative variance explained by PC1 & PC2 is only about 20%.
+In a PCA plot visualising the first two PCs of the RNA-seq expression data, stratified by IDH status, it can be clearly seen that the data points from IDH mutant samples and IDH wild type each cluster together. This is expected since the mutational status of the isocitrate dehydrogenase (IDH) induces broad metabolic and epigenetic reprogramming and therefore influences expression levels of other genes. It should be noted that the cumulative variance explained by PC1 & PC2 is about 20%.
 
 ```{r}
 summary(pca_fit)$importance[3, 2]

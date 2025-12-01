@@ -130,9 +130,9 @@ Dataset: GEO (NCBI) - GSE271059^\[2\]^ <br>
 :::
 
 ::: {.column width="30%"}
--   Each point = one gene (TLS+ vs TLS−)
+-   Each point = one gene (TLS vs control)
 -   Several genes are significantly associated with TLS status (q \< 0.05)
--   Some genes are higher in TLS+, others in controls
+-   A large amount of genes are higher in TLS, others in controls
 :::
 :::::
 
@@ -150,7 +150,7 @@ Dataset: GEO (NCBI) - GSE271059^\[2\]^ <br>
 ::: {.column width="30%"}
 -   Each point = one tumor sample
 -   GEP score (18-gene immune signature)
--   Median GEP score is higher in TLS+ tumors than in controls
+-   Median GEP score is higher in TLS tumors than in controls
 :::
 :::::
 
@@ -158,22 +158,21 @@ Dataset: GEO (NCBI) - GSE271059^\[2\]^ <br>
 
 #### Results
 
-::::: columns
-::: {.column width="70%"}
-![](images/significant_genes_overlap.png)
-:::
+![](images/significant_genes_overlap.png){fig-align="center"}
 
-::: {.column width="30%"}
--   Three genes were found to be TLS-significant
-:::
-:::::
+<div style="text-align: center;">
+Three genes were found to be TLS-significant
+</div>
 
 ------------------------------------------------------------------------
 
 #### Discussion
 
--   PCA: TLS+ and control tumors largely overlap -\> TLS is not the main driver of variation
--   PCA: clear separation by IDH status -\> Strong impact of IDH mutations on expression
--   TLS+ gliomas show transcriptional differences compared with controls
--   TLS+ samples have higher immune GEP scores -\> More active adaptive immune response
--   Overall, gliomas with TLS display a more active immune microenvironment
+-   PCA: TLS and control tumours largely overlap → TLS is not the main driver of variation.
+-   PCA: clear separation by IDH status → strong impact of IDH mutations on expression.
+-   PC1 + PC2 explain \~20% of variance in a \>40,000-dimensional dataset.
+-   TLS gliomas show widespread transcriptional differences compared with controls.
+-   TLS samples have higher immune GEP scores → more active adaptive immune responses.
+-   Only 3 GEP genes are individually significant → Coordinated moderate changes rather than strong effects per gene
+-   Overall, TLS gliomas have a more active immune microenvironment; GEP scores could potentially help predict response to immunotherapy
+-   Limitations: limited sample size, unaccounted confounders (e.g. sex, IDH), and simple linear models
