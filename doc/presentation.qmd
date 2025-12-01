@@ -1,5 +1,5 @@
 ---
-title: "Association of Tumor-Localizated TLS with Gene Expression Profile in Glioma Samples"
+title: "Association of Tumor-Localized TLS with Gene Expression Profile in Glioma Samples"
 author: "Group 21"
 format:
   revealjs:
@@ -16,7 +16,27 @@ format:
 
 **Study: "Spatial immune profiling defines a subset of human gliomas with functional tertiary lymphoid structures"**^\[1\]^
 
-![](images/Graphical_summary_article.png){width="11cm" height="10cm" fig-align="left"}
+::::: columns
+::: {.column width="50%"}
+![](images/Graphical_summary_article.png){fig-align="left" width="170cm" height="10cm"}
+:::
+
+::: {.column width="50%"}
+Background:
+
+-   Adult-type diffuse gliomas: "cold" tumors
+
+-   Tertiary Lymphoid structures (TLSs)
+
+Objectives:
+
+-   Visualizing transcriptional patterns
+
+-   Identifying key genes
+
+-   Confirming TLS functionality
+:::
+:::::
 
 ::: footer[
 <span style="font-size:0.5em;"> \[1\] Pinar Cakmak, Lun JH, Singh A, et al. Spatial immune profiling defines a subset of human gliomas with functional tertiary lymphoid structures. Immunity. 2025;58(11):2847-2863.e8. <a href="https://doi.org/10.1016/j.immuni.2025.09.018"> \[doi\] </a>
