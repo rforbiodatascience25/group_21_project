@@ -1,6 +1,12 @@
 ---
 title: "Association of Tumor-Localized TLS with Gene Expression Profile in Glioma Samples"
-author: "Group 21"
+subtitle: "Group 21" 
+author: 
+  - Sai Renuka Chandrasekaran
+  - Ole Lennart Decker
+  - Raquel Ruiz Pascual
+  - Parastoo Tabibzadehtehrani
+  - Magdalena Zydorczak
 format:
   revealjs:
     theme: serif
@@ -160,9 +166,9 @@ Dataset: GEO (NCBI) - GSE271059^\[2\]^ <br>
 
 ![](images/significant_genes_overlap.png){fig-align="center"}
 
-<div style="text-align: center;">
+::: {style="text-align: center;"}
 Three genes were found to be TLS-significant
-</div>
+:::
 
 ------------------------------------------------------------------------
 
